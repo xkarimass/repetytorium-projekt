@@ -17,7 +17,7 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 - System ocen w skali 1–10
 - Automatyczne liczenie średniej ocen
 - Dynamiczne generowanie elementów w JavaScript
-- Interaktywne przyciski ocen
+- Przyciski ocen
 
 ## 📁 Struktura projektu
 - index.html – struktura strony
@@ -27,5 +27,4 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 ## 🚀 Możliwości rozwoju
 - Dodanie wyszukiwarki
 - Sortowanie po ocenie
-- Zapisywanie danych w localStorage
 - Tryb ciemny / jasny
