@@ -9,7 +9,7 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 
 ## 🛠️ Technologie
 - HTML
-- CSS3
+- CSS
 - JavaScript
 
 ## ⚙️ Funkcjonalności
