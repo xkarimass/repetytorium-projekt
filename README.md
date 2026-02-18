@@ -8,9 +8,9 @@ Celem projektu było stworzenie dynamicznej strony internetowej
 z wykorzystaniem HTML, CSS oraz JavaScript.
 
 ## 🛠️ Technologie
-- HTML5
+- HTML
 - CSS3
-- JavaScript (ES6)
+- JavaScript
 
 ## ⚙️ Funkcjonalności
 - Wyświetlanie listy tytułów
