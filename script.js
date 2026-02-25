@@ -12,6 +12,24 @@ const items = [
     type: "game",
     ratingSum: 40,
     ratingCount: 5
+  },{
+    id: 3,
+    title: "Femboy Futa House",
+    type: "game",
+    ratingSum: 50,
+    ratingCount: 5
+  },{
+    id: 4,
+    title: "Miside",
+    type: "game",
+    ratingSum: 30,
+    ratingCount: 5
+  },{
+    id: 5,
+    title: "Garden warefare 2",
+    type: "game",
+    ratingSum: 25,
+    ratingCount: 5
   }
 ];
 
