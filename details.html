@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Szczegóły</title>
+</head>
+<body>
+  <h1>Strona szczegółów</h1>
+  <p id="title"></p>
+  <p id="description"></p>
+  <button id="backBtn"> Wróc do listy</button>
+
+  <script>
+    // pobieramy tytuł z URL
+    const params = new URLSearchParams(window.location.search);
+    const title = params.get("title");
+    document.getElementById("title").textContent = title ? "Wybrany tytuł: " + title : "Brak tytułu";
+  </script>
+</body>
+</html>

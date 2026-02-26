@@ -1,26 +1,34 @@
-body{
-    margin: 0;
-    font-family: arial, sans-serif;
-    background: #121212;
-    color: #fff;
+#search-container {
+  margin: 20px auto;
+  width: 300px;
+  position: relative; /* ważne, żeby suggestions były pod inputem */
 }
-header{
-    padding: 20px;
-    text-align: center;
-    background: #1f1f1f;
+
+#search {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
 }
-.card{
-    background: #1e1e1e;
-    margin: 20px;
-    padding: 15px;
-    border-radius: 8px;
+
+#suggestions {
+  position: absolute; /* dzięki temu lista pojawia się pod inputem */
+  top: 36px; /* tu ustawiasz dystans od inputu */
+  width: 100%;
+  background: #1e1e1e;
+  color: #fff;
+  border-radius: 5px;
+  max-height: 150px;
+  overflow-y: auto;
+  display: none; /* na start ukryte, JS pokaże jak będą dopasowania */
 }
-.rating span{
-    cursor: pointer;
-    font-size: 20px;
-}main{
-    margin: 0 auto;
-    width: 60vw;
-    height: 90vw;
-    background-color: rgb(16, 17, 17);
+
+#suggestions div {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#suggestions div:hover {
+  background: #333; /* efekt podświetlenia przy najechaniu */
 }
