@@ -3,19 +3,115 @@
 <head>
   <meta charset="UTF-8">
   <title>Szczegóły</title>
+  <style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #141e30, #243b55);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  display: flex;
+  background: #1f1f1f;
+  border-radius: 15px;
+  overflow: hidden;
+  width: 800px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.6);
+}
+
+.card img {
+  width: 300px;
+  object-fit: cover;
+}
+
+.info {
+  padding: 30px;
+}
+
+.info h1 {
+  margin-top: 0;
+  font-size: 32px;
+}
+
+.info p {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #ff3c3c;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #ff0000;
+}
+</style>
 </head>
 <body>
-  <h1>Strona szczegółów</h1>
-  <p id="title"></p>
-  <p id="description"></p>
-  <button id="backBtn"> Wróc do listy</button>
 
-  <script>
-    
-    const params = new URLSearchParams(window.location.search);
-    const title = params.get("title");
-    document.getElementById("title").textContent = title ? "Wybrany tytuł: " + title : "Brak tytułu";
-  </script>
+<div class="card">
+  <img id="cover" src="" alt="Okładka">
+  <div class="info">
+    <h1 id="title"></h1>
+    <p id="type"></p>
+    <p id="description"></p>
+    <button id="backBtn">⬅ Wróć</button>
+  </div>
+</div>
+
+<script>
+let items = [
+  {
+    title: "Death Note",
+    type: "anime",
+    description: "Młody chłopak znajduje notes śmierci...",
+    image: "DN.jpg"
+  },
+  {
+    title: "Attack on Titan",
+    type: "anime",
+    description: "Ludzkość walczy z Tytanami...",
+    image: "aot.jpg"
+  },
+  {
+    title: "The Witcher 3",
+    type: "game",
+    description: "Przygody Geralta z Rivii...",
+    image: "wiedzmin3.jpg"
+  }
+];
+
+let params = new URLSearchParams(window.location.search);
+let titleFromURL = decodeURIComponent(params.get("title")).toLowerCase();
+
+let selectedItem = items.find(item => item.title.toLowerCase() === titleFromURL);
+
+if (selectedItem) {
+  document.getElementById("title").textContent = selectedItem.title;
+  document.getElementById("type").textContent = "Typ: " + selectedItem.type;
+  document.getElementById("description").textContent = selectedItem.description;
+  document.getElementById("cover").src = "images/" + selectedItem.image;
+} else {
+  document.getElementById("title").textContent = "Nie znaleziono tytułu";
+}
+
+document.getElementById("backBtn").addEventListener("click", () => {
+  window.location.href = "index.html";
+});
+</script>
+
 </body>
-
 </html>
