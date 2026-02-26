@@ -1,4 +1,3 @@
-// lista anime/gier
 let items = [
   { title: "Death Note", type: "anime" },
   { title: "Attack on Titan", type: "anime" },
