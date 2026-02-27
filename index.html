@@ -1,25 +1,65 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <title>Anime & Games Rating</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Anime & Games Search</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: white;
+}
+
+.search-box {
+  text-align: center;
+}
+
+input {
+  padding: 15px;
+  width: 300px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+}
+
+button {
+  padding: 15px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+  background: #ff3c3c;
+  color: white;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #ff0000;
+}
+</style>
 </head>
 <body>
 
-<header>
-  <h1>⭐ Anime & Games Rating</h1>
-</header>
-
-
-<div id="search-container">
-  <input type="text" id="search" placeholder="Wpisz tytuł anime lub gry">
-  <div id="suggestions"></div>
+<div class="search-box">
+  <h1>Wyszukaj Anime lub Grę</h1>
+  <input type="text" id="searchInput" placeholder="Wpisz tytuł...">
+  <button onclick="search()">Szukaj</button>
 </div>
 
+<script>
+function search() {
+  let value = document.getElementById("searchInput").value;
+  if (value.trim() !== "") {
+    window.location.href = "results.html?search=" + value;
+  }
+}
+</script>
 
-<main id="list"></main>
-
-<script src="script.js"></script>
 </body>
 </html>
