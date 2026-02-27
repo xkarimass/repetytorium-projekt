@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <title>Szczegóły</title>
-  <style>
+<meta charset="UTF-8">
+<title>Szczegóły</title>
+<style>
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #141e30, #243b55);
+  background: #000;
   color: white;
   display: flex;
   justify-content: center;
@@ -33,84 +33,107 @@ body {
   padding: 30px;
 }
 
-.info h1 {
-  margin-top: 0;
-  font-size: 32px;
-}
-
-.info p {
-  margin: 10px 0;
-  line-height: 1.6;
-}
-
 button {
   margin-top: 20px;
   padding: 10px 20px;
   background: #ff3c3c;
   border: none;
   color: white;
-  font-size: 16px;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background: #ff0000;
 }
 </style>
 </head>
 <body>
 
 <div class="card">
-  <img id="cover" src="" alt="Okładka">
+  <img id="cover">
   <div class="info">
     <h1 id="title"></h1>
     <p id="type"></p>
     <p id="description"></p>
-    <button id="backBtn">⬅ Wróć</button>
+
+  <div id="extraDetails"></div>
+    <button onclick="goBack()">⬅ Wróć</button>
   </div>
 </div>
 
 <script>
 let items = [
   {
-    title: "Death Note",
-    type: "anime",
-    description: "Młody chłopak znajduje notes śmierci...",
-    image: "DN.jpg"
-  },
-  {
     title: "Attack on Titan",
     type: "anime",
     description: "Ludzkość walczy z Tytanami...",
-    image: "aot.jpg"
+    image: "aot.jpg",
+
+    genre: "Akcja, Dramat",
+    episodes: 87,
+    episodeLength: "24 min",
+    status: "Zakończone",
+    startDate: "2013",
+    endDate: "2023"
+  },
+  {
+    title: "Death Note",
+    type: "anime",
+    description: "Młody chłopak znajduje notes śmierci...",
+    image: "DN.jpg",
+
+    genre: "Thriller, Psychologiczne",
+    episodes: 37,
+    episodeLength: "23 min",
+    status: "Zakończone",
+    startDate: "2006",
+    endDate: "2007"
   },
   {
     title: "The Witcher 3",
     type: "game",
     description: "Przygody Geralta z Rivii...",
-    image: "wiedzmin3.jpg"
+    image: "wiedzmin3.jpg",
+
+    genre: "RPG, Fantasy",
+    releaseYear: "2015",
+    studio: "CD Projekt Red",
+    platform: "PC, PS4, Xbox One"
   }
 ];
-
 let params = new URLSearchParams(window.location.search);
-let titleFromURL = decodeURIComponent(params.get("title")).toLowerCase();
+let titleFromURL = params.get("title");
 
-let selectedItem = items.find(item => item.title.toLowerCase() === titleFromURL);
+let selectedItem = items.find(item => item.title === titleFromURL);
 
 if (selectedItem) {
   document.getElementById("title").textContent = selectedItem.title;
   document.getElementById("type").textContent = "Typ: " + selectedItem.type;
   document.getElementById("description").textContent = selectedItem.description;
   document.getElementById("cover").src = "images/" + selectedItem.image;
-} else {
-  document.getElementById("title").textContent = "Nie znaleziono tytułu";
 }
 
-document.getElementById("backBtn").addEventListener("click", () => {
-  window.location.href = "index.html";
-});
+function goBack() {
+  window.history.back();
+}
+let extra = document.getElementById("extraDetails");
+
+if (selectedItem.type === "anime") {
+  extra.innerHTML = `
+    <p><strong>Gatunek:</strong> ${selectedItem.genre}</p>
+    <p><strong>Odcinki:</strong> ${selectedItem.episodes}</p>
+    <p><strong>Czas odcinka:</strong> ${selectedItem.episodeLength}</p>
+    <p><strong>Status:</strong> ${selectedItem.status}</p>
+    <p><strong>Start emisji:</strong> ${selectedItem.startDate}</p>
+    <p><strong>Koniec emisji:</strong> ${selectedItem.endDate}</p>
+  `;
+}
+
+if (selectedItem.type === "game") {
+  extra.innerHTML = `
+    <p><strong>Gatunek:</strong> ${selectedItem.genre}</p>
+    <p><strong>Rok wydania:</strong> ${selectedItem.releaseYear}</p>
+    <p><strong>Studio:</strong> ${selectedItem.studio}</p>
+    <p><strong>Platforma:</strong> ${selectedItem.platform}</p>
+  `;
+}
 </script>
 
 </body>
