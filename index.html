@@ -149,8 +149,10 @@ button:hover {
 </header>
 
 <div class="search-box">
-  <input type="text" id="searchInput" placeholder="Wpisz tytuł...">
-  <button onclick="search()">Szukaj</button>
+  <form id="searchForm">
+    <input type="text" id="searchInput" placeholder="Wpisz tytuł...">
+    <button type="submit">Szukaj</button>
+  </form>
 </div>
 
 <div class="featured-section">
@@ -181,37 +183,37 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let items = [
-{title:"Attack on Titan",type:"anime",description:"Ludzkość walczy z Tytanami...",image:"aot.jpg"},
-{title:"Death Note",type:"anime",description:"Młody chłopak znajduje notes śmierci...",image:"DN.jpg"},
-{title:"The Witcher 3",type:"game",description:"Przygody Geralta z Rivii...",image:"wiedzmin3.jpg"},
-{title:"Red Dead Redemption 2",type:"game",description:"Przygoda w otwartym świecie Dzikiego Zachodu",image:"rdr2.jpg"},
-{title:"Naruto",type:"anime",description:"Historia młodego ninja z wioski Liścia",image:"naruto.jpg"},
-{title:"Naruto Shippuden",type:"anime",description:"Kontynuacja przygód Naruto i jego przyjaciół",image:"narutoship.jpg"},
-{title:"Boruto: Naruto Next Generations",type:"anime",description:"Opowieść o synu Naruto, Boruto",image:"boruto.jpg"},
-{title:"The Last of Us Part I",type:"game",description:"Przygoda Joela i Ellie w postapokaliptycznym świecie",image:"TLOU1.jpg"},
-{title:"The Last of Us Part II",type:"game",description:"Kontynuacja historii Ellie i Joela",image:"TLOU2.jpg"},
-{title:"Cyberpunk 2077",type:"game",description:"Futurystyczne RPG w Night City",image:"CB.jpg"},
-{title:"GTA 3",type:"game",description:"Klasyczna gra akcji w Liberty City",image:"GT3.jpg"},
-{title:"GTA 4",type:"game",description:"Kontynuacja przygód w Liberty City",image:"GT4.jpg"},
-{title:"GTA 5",type:"game",description:"Największa część serii GTA",image:"GT5.jpg"},
-{title:"GTA: San Andreas",type:"game",description:"Klasyczna gra w ogromnym stanie San Andreas",image:"GTSA.jpg"},
-{title:"GTA: Vice City",type:"game",description:"Kultowa gra w Vice City",image:"GTVC.jpg"},
-{title:"Elden Ring",type:"game",description:"Mroczne RPG akcji w ogromnym świecie fantasy",image:"elden.jpg"},
-{title:"God of War",type:"game",description:"Przygody Kratosa w mitologii nordyckiej",image:"GoW.jpg"},
-{title:"God of War Ragnarok",type:"game",description:"Kontynuacja historii Kratosa",image:"GoWR.jpg"},
-{title:"One Piece",type:"anime",description:"Przygody Luffy'ego i jego przyjaciół",image:"op.jpg"},
-{title:"Demon Slayer",type:"anime",description:"Historia Tanjiro i jego siostry",image:"DS.jpg"},
-{title:"Tokyo Ghoul",type:"anime",description:"Historia Kaneki'ego, pół-gula",image:"TG.jpg"},
-{title:"Jujutsu Kaisen",type:"anime",description:"Walka z przeklętymi duchami",image:"JJK.jpg"},
-{title:"Clannad",type:"anime",description:"Historia Tomoyi i Nagisy, pełna emocji",image:"clannad.jpg"},
-{title:"Clannad: After Story",type:"anime",description:"Kontynuacja przygód Tomoyi i Nagisy",image:"clannadAS.jpg"}
+  {title:"Attack on Titan",type:"anime",description:"Ludzkość walczy z Tytanami...",image:"aot.jpg"},
+  {title:"Death Note",type:"anime",description:"Młody chłopak znajduje notes śmierci...",image:"DN.jpg"},
+  {title:"The Witcher 3",type:"game",description:"Przygody Geralta z Rivii...",image:"wiedzmin3.jpg"},
+  {title:"Red Dead Redemption 2",type:"game",description:"Przygoda w otwartym świecie Dzikiego Zachodu",image:"rdr2.jpg"},
+  {title:"Naruto",type:"anime",description:"Historia młodego ninja z wioski Liścia",image:"naruto.jpg"},
+  {title:"Naruto Shippuden",type:"anime",description:"Kontynuacja przygód Naruto i jego przyjaciół",image:"narutoship.jpg"},
+  {title:"Boruto: Naruto Next Generations",type:"anime",description:"Opowieść o synu Naruto, Boruto",image:"boruto.jpg"},
+  {title:"The Last of Us Part I",type:"game",description:"Przygoda Joela i Ellie w postapokaliptycznym świecie",image:"TLOU1.jpg"},
+  {title:"The Last of Us Part II",type:"game",description:"Kontynuacja historii Ellie i Joela",image:"TLOU2.jpg"},
+  {title:"Cyberpunk 2077",type:"game",description:"Futurystyczne RPG w Night City",image:"CB.jpg"},
+  {title:"GTA 3",type:"game",description:"Klasyczna gra akcji w Liberty City",image:"GT3.jpg"},
+  {title:"GTA 4",type:"game",description:"Kontynuacja przygód w Liberty City",image:"GT4.jpg"},
+  {title:"GTA 5",type:"game",description:"Największa część serii GTA",image:"GT5.jpg"},
+  {title:"GTA: San Andreas",type:"game",description:"Klasyczna gra w ogromnym stanie San Andreas",image:"GTSA.jpg"},
+  {title:"GTA: Vice City",type:"game",description:"Kultowa gra w Vice City",image:"GTVC.jpg"},
+  {title:"Elden Ring",type:"game",description:"Mroczne RPG akcji w ogromnym świecie fantasy",image:"elden.jpg"},
+  {title:"God of War",type:"game",description:"Przygody Kratosa w mitologii nordyckiej",image:"GoW.jpg"},
+  {title:"God of War Ragnarok",type:"game",description:"Kontynuacja historii Kratosa",image:"GoWR.jpg"},
+  {title:"One Piece",type:"anime",description:"Przygody Luffy'ego i jego przyjaciół",image:"op.jpg"},
+  {title:"Demon Slayer",type:"anime",description:"Historia Tanjiro i jego siostry",image:"DS.jpg"},
+  {title:"Tokyo Ghoul",type:"anime",description:"Historia Kaneki'ego, pół-gula",image:"TG.jpg"},
+  {title:"Jujutsu Kaisen",type:"anime",description:"Walka z przeklętymi duchami",image:"JJK.jpg"},
+  {title:"Clannad",type:"anime",description:"Historia Tomoyi i Nagisy, pełna emocji",image:"clannad.jpg"},
+  {title:"Clannad: After Story",type:"anime",description:"Kontynuacja przygód Tomoyi i Nagisy",image:"clannadAS.jpg"}
 ];
 
 let featuredItems = [
-{title:"Attack on Titan",image:"aot.jpg",description:"Ludzkość walczy z Tytanami..."},
-{title:"The Witcher 3",image:"wiedzmin3.jpg",description:"Przygody Geralta z Rivii..."},
-{title:"Naruto",image:"naruto.jpg",description:"Historia młodego ninja z wioski Liścia"},
-{title:"Elden Ring",image:"elden.jpg",description:"Mroczne RPG akcji w ogromnym świecie fantasy"}
+  {title:"Attack on Titan",image:"aot.jpg",description:"Ludzkość walczy z Tytanami..."},
+  {title:"The Witcher 3",image:"wiedzmin3.jpg",description:"Przygody Geralta z Rivii..."},
+  {title:"Naruto",image:"naruto.jpg",description:"Historia młodego ninja z wioski Liścia"},
+  {title:"Elden Ring",image:"elden.jpg",description:"Mroczne RPG akcji w ogromnym świecie fantasy"}
 ];
 
 let featuredContainer = document.getElementById("featuredContainer");
@@ -244,14 +246,15 @@ async function loadTop10(){
 
 loadTop10();
 
-function search(){
-  const value=document.getElementById("searchInput").value;
-  if(value.trim()!==""){ window.location.href="results.html?search="+value; }
-}
+// Poprawiona wyszukiwarka
+document.getElementById("searchForm").addEventListener("submit", function(e){
+  e.preventDefault(); // blokuje odświeżenie strony
+  const value = document.getElementById("searchInput").value.trim();
+  if(value !== ""){
+    window.location.href = "results.html?search=" + encodeURIComponent(value);
+  }
+});
 </script>
 
 </body>
 </html>
-
-
-
