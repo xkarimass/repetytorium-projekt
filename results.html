@@ -207,7 +207,7 @@ let params = new URLSearchParams(window.location.search);
 let searchValue = params.get("search")?.toLowerCase() || "";
 let currentFilter = "all";
 
-document.getElementById("searchInput").value = searchValue;
+document.getElementById("searchInput").value = decodeURIComponent(params.get("search") || "");
 
 renderResults();
 
@@ -253,13 +253,13 @@ function filterType(type) {
 }
 
 function newSearch() {
-  searchValue = document.getElementById("searchInput").value.toLowerCase();
-  renderResults();
+  const value = document.getElementById("searchInput").value.trim();
+  if(value !== ""){
+    window.location.href = "results.html?search=" + encodeURIComponent(value);
+  }
 }
 
 </script>
 
 </body>
 </html>
-
-
