@@ -7,59 +7,99 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #000;
+  background: radial-gradient(circle at top, #111 0%, #000 70%);
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
 }
+
 .card {
-  position: relative;
   display: flex;
-  background: #1f1f1f;
-  border-radius: 15px;
+  background: #1a1a1a;
+  border-radius: 20px;
   overflow: hidden;
-  width: 800px;
-  box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
+  width: 1000px;
+  max-width: 95%;
+  box-shadow: 0 0 60px rgba(255, 0, 0, 0.4);
+  transition: 0.3s ease;
 }
+
+.card:hover {
+  transform: scale(1.01);
+}
+
 .card img {
-  width: 300px;
+  width: 400px;
   object-fit: cover;
-  border-right: 2px solid #ff3c3c;
 }
+
 .info {
-  padding: 30px;
-  width: 100%;
-  position: relative;
+  padding: 40px;
+  flex: 1;
 }
+
 .info h1 {
   color: #ff3c3c;
   margin-top: 0;
+  font-size: 32px;
 }
+
 .rating-container {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  text-align: right;
+  margin: 15px 0 25px 0;
 }
-.stars { display: inline-block; font-size: 20px; cursor: pointer; color: white; }
-.stars .star.filled { color: #ff3c3c; }
-#averageRating { font-weight: bold; color: #ff3c3c; }
-#voteCount { font-size: 12px; color: #aaa; }
-.info p { margin: 5px 0; }
-#extraDetails p { margin: 3px 0; }
+
+.stars {
+  font-size: 26px;
+  cursor: pointer;
+  letter-spacing: 3px;
+}
+
+.star {
+  transition: 0.2s ease;
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+.stars .filled {
+  color: #ff3c3c;
+}
+
+#averageRating {
+  font-weight: bold;
+  font-size: 18px;
+  color: #ff3c3c;
+}
+
+#voteCount {
+  font-size: 13px;
+  color: #aaa;
+}
+
+.info p {
+  margin: 6px 0;
+  font-size: 15px;
+}
+
 button {
-  margin-top: 20px;
-  padding: 10px 20px;
+  margin-top: 30px;
+  padding: 12px 25px;
   background: #ff3c3c;
   border: none;
   color: white;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
+  font-size: 14px;
   transition: 0.3s;
 }
-button:hover { background: #ff0000; transform: scale(1.05); }
+
+button:hover {
+  background: #ff0000;
+  transform: scale(1.05);
+}
 </style>
 </head>
 <body>
@@ -203,4 +243,3 @@ stars.forEach(star=>{
 
 </body>
 </html>
-
