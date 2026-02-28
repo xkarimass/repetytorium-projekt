@@ -7,7 +7,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #000;
+  background: linear-gradient(135deg, #000000, #1a1a1a);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,6 +17,10 @@ body {
 
 .search-box {
   text-align: center;
+  background: #1f1f1f;
+  padding: 50px;
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
 }
 
 input {
@@ -24,7 +28,15 @@ input {
   width: 300px;
   font-size: 16px;
   border-radius: 10px;
-  border: none;
+  border: 2px solid #ff3c3c;
+  background: #000;
+  color: white;
+}
+
+input:focus {
+  outline: none;
+  border-color: #ff0000;
+  box-shadow: 0 0 10px #ff0000;
 }
 
 button {
@@ -41,6 +53,7 @@ button {
 
 button:hover {
   background: #ff0000;
+  transform: scale(1.05);
 }
 </style>
 </head>
