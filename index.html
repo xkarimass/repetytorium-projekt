@@ -7,20 +7,30 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #000000, #1a1a1a);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  background: linear-gradient(135deg,#000,#1a1a1a);
   color: white;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 40px 20px 20px 20px;
+}
+
+header h1 {
+  font-size: 36px;
+  color: #ff3c3c;
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  0% { text-shadow: 0 0 5px #ff3c3c; }
+  100% { text-shadow: 0 0 20px #ff0000; }
 }
 
 .search-box {
   text-align: center;
-  background: #1f1f1f;
-  padding: 50px;
-  border-radius: 20px;
-  box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
+  margin-bottom: 50px;
 }
 
 input {
@@ -55,22 +65,188 @@ button:hover {
   background: #ff0000;
   transform: scale(1.05);
 }
+
+.featured-section, .top10-section {
+  margin: 40px auto;
+  max-width: 1000px;
+  padding: 20px;
+  border-radius: 15px;
+  background: #1a1a1a;
+  box-shadow: 0 0 40px rgba(255,0,0,0.3);
+}
+
+.featured-section h2, .top10-section h2 {
+  color: #ff3c3c;
+  margin-bottom: 20px;
+}
+
+.featured-container, .top10-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.card-mini {
+  background: #111;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 200px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(255,0,0,0.3);
+  transition: 0.3s;
+}
+
+.card-mini:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px #ff3c3c;
+}
+
+.card-mini img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-bottom: 2px solid #ff3c3c;
+}
+
+.card-mini h3 {
+  color: #ff3c3c;
+  margin: 8px;
+  font-size: 16px;
+}
+
+.card-mini p {
+  color: white;
+  margin: 0 8px 8px 8px;
+  font-size: 13px;
+}
+
+#backButton {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 12px 25px;
+  background: #ff3c3c;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+  z-index: 1000;
+}
+
+#backButton:hover {
+  background: #ff0000;
+  transform: scale(1.05);
+}
 </style>
 </head>
 <body>
 
+<header>
+  <h1>Witaj w Anime & Games Search</h1>
+</header>
+
 <div class="search-box">
-  <h1>Wyszukaj Anime lub Grę</h1>
   <input type="text" id="searchInput" placeholder="Wpisz tytuł...">
   <button onclick="search()">Szukaj</button>
 </div>
 
-<script>
-function search() {
-  let value = document.getElementById("searchInput").value;
-  if (value.trim() !== "") {
-    window.location.href = "results.html?search=" + value;
-  }
+<div class="featured-section">
+  <h2>Polecane tytuły</h2>
+  <div class="featured-container" id="featuredContainer"></div>
+</div>
+
+<div class="top10-section">
+  <h2>Top 10 najlepiej ocenianych</h2>
+  <div class="top10-container" id="top10Container"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBSA7M0IwPlj4wEWdENQUnstPuEtBMYAz8",
+  authDomain: "projekt-da6f3.firebaseapp.com",
+  projectId: "projekt-da6f3",
+  storageBucket: "projekt-da6f3.firebasestorage.app",
+  messagingSenderId: "139807931879",
+  appId: "1:139807931879:web:3758409524b9e1cefe1142",
+  measurementId: "G-K049858GR0"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let items = [
+{title:"Attack on Titan",type:"anime",description:"Ludzkość walczy z Tytanami...",image:"aot.jpg"},
+{title:"Death Note",type:"anime",description:"Młody chłopak znajduje notes śmierci...",image:"DN.jpg"},
+{title:"The Witcher 3",type:"game",description:"Przygody Geralta z Rivii...",image:"wiedzmin3.jpg"},
+{title:"Red Dead Redemption 2",type:"game",description:"Przygoda w otwartym świecie Dzikiego Zachodu",image:"rdr2.jpg"},
+{title:"Naruto",type:"anime",description:"Historia młodego ninja z wioski Liścia",image:"naruto.jpg"},
+{title:"Naruto Shippuden",type:"anime",description:"Kontynuacja przygód Naruto i jego przyjaciół",image:"narutoship.jpg"},
+{title:"Boruto: Naruto Next Generations",type:"anime",description:"Opowieść o synu Naruto, Boruto",image:"boruto.jpg"},
+{title:"The Last of Us Part I",type:"game",description:"Przygoda Joela i Ellie w postapokaliptycznym świecie",image:"TLOU1.jpg"},
+{title:"The Last of Us Part II",type:"game",description:"Kontynuacja historii Ellie i Joela",image:"TLOU2.jpg"},
+{title:"Cyberpunk 2077",type:"game",description:"Futurystyczne RPG w Night City",image:"CB.jpg"},
+{title:"GTA 3",type:"game",description:"Klasyczna gra akcji w Liberty City",image:"GT3.jpg"},
+{title:"GTA 4",type:"game",description:"Kontynuacja przygód w Liberty City",image:"GT4.jpg"},
+{title:"GTA 5",type:"game",description:"Największa część serii GTA",image:"GT5.jpg"},
+{title:"GTA: San Andreas",type:"game",description:"Klasyczna gra w ogromnym stanie San Andreas",image:"GTSA.jpg"},
+{title:"GTA: Vice City",type:"game",description:"Kultowa gra w Vice City",image:"GTVC.jpg"},
+{title:"Elden Ring",type:"game",description:"Mroczne RPG akcji w ogromnym świecie fantasy",image:"elden.jpg"},
+{title:"God of War",type:"game",description:"Przygody Kratosa w mitologii nordyckiej",image:"GoW.jpg"},
+{title:"God of War Ragnarok",type:"game",description:"Kontynuacja historii Kratosa",image:"GoWR.jpg"},
+{title:"One Piece",type:"anime",description:"Przygody Luffy'ego i jego przyjaciół",image:"op.jpg"},
+{title:"Demon Slayer",type:"anime",description:"Historia Tanjiro i jego siostry",image:"DS.jpg"},
+{title:"Tokyo Ghoul",type:"anime",description:"Historia Kaneki'ego, pół-gula",image:"TG.jpg"},
+{title:"Jujutsu Kaisen",type:"anime",description:"Walka z przeklętymi duchami",image:"JJK.jpg"},
+{title:"Clannad",type:"anime",description:"Historia Tomoyi i Nagisy, pełna emocji",image:"clannad.jpg"},
+{title:"Clannad: After Story",type:"anime",description:"Kontynuacja przygód Tomoyi i Nagisy",image:"clannadAS.jpg"}
+];
+
+let featuredItems = [
+{title:"Attack on Titan",image:"aot.jpg",description:"Ludzkość walczy z Tytanami..."},
+{title:"The Witcher 3",image:"wiedzmin3.jpg",description:"Przygody Geralta z Rivii..."},
+{title:"Naruto",image:"naruto.jpg",description:"Historia młodego ninja z wioski Liścia"},
+{title:"Elden Ring",image:"elden.jpg",description:"Mroczne RPG akcji w ogromnym świecie fantasy"}
+];
+
+let featuredContainer = document.getElementById("featuredContainer");
+featuredItems.forEach(item=>{
+  let card = document.createElement("div");
+  card.className = "card-mini";
+  card.innerHTML=`<img src="images/${item.image}"><h3>${item.title}</h3><p>${item.description}</p>`;
+  card.addEventListener("click",()=>window.location.href="details.html?title="+item.title);
+  featuredContainer.appendChild(card);
+});
+
+async function loadTop10(){
+  const ratingsCol = collection(db,"ratings");
+  const q = query(ratingsCol, orderBy("total","desc"), limit(10));
+  const snapshot = await getDocs(q);
+  let top10Container = document.getElementById("top10Container");
+  snapshot.forEach(doc=>{
+    const data = doc.data();
+    const avg = data.votes ? (data.total/data.votes).toFixed(1) : 0;
+    const card = document.createElement("div");
+    card.className = "card-mini";
+    const item = items.find(i=>i.title===doc.id);
+    if(item){
+      card.innerHTML = `<img src="images/${item.image}"><h3>${item.title}</h3><p>Średnia: ${avg} / 10</p>`;
+      card.addEventListener("click",()=>window.location.href="details.html?title="+item.title);
+      top10Container.appendChild(card);
+    }
+  });
+}
+
+loadTop10();
+
+function search(){
+  const value=document.getElementById("searchInput").value;
+  if(value.trim()!==""){ window.location.href="results.html?search="+value; }
 }
 </script>
 
