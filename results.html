@@ -104,12 +104,31 @@ h1 {
   font-size: 14px;
   line-height: 1.4;
 }
+#backButton {
+  padding: 12px 25px;
+  background: #ff3c3c;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+#backButton:hover {
+  background: #ff0000;
+  transform: scale(1.05);
+}
 </style>
 </head>
 
 <body>
 
 <h1>Wyniki wyszukiwania</h1>
+
+<div style="text-align:center; margin:20px;">
+  <button id="backButton">Wróć</button>
+</div>
 
 <div class="top-bar">
   <input type="text" id="searchInput" placeholder="Wyszukaj...">
@@ -258,7 +277,9 @@ function newSearch() {
     window.location.href = "results.html?search=" + encodeURIComponent(value);
   }
 }
-
+document.getElementById("backButton").addEventListener("click", () => {
+  window.location.href = "index.html"; // lub window.history.back();
+});
 </script>
 
 </body>
