@@ -171,7 +171,7 @@ let items = [
 {title:"God of War Ragnarök",type:"game",description:"Kontynuacja przygód Kratosa i Atreusa podczas Ragnaröku.",image:"GoWR.jpg",genre:"Akcja, RPG",releaseYear:"2022",studio:"Santa Monica Studio",platform:"PC, PS4, PS5"},
 { title: "Jujutsu Kaisen", type: "anime", description: "Uczeń liceum wplątany w świat klątw i egzorcystów.", image: "JJK.jpg", genre: "Shounen, Akcja, Nadprzyrodzone", episodes: 24, episodeLength: "23 min", status: "Zakończone", startDate: "2020-10-03", endDate: "2021-03-27" },
 { title: "Demon Slayer", type: "anime", description: "Tanjiro walczy z demonami, by uratować swoją siostrę.", image: "DS.jpg", genre: "Shounen, Akcja, Fantasy", episodes: 63, episodeLength: "24 min", status: "Zakończone", startDate: "2019-04-06", endDate: "2019-09-28" },
-{ title: "One Piece", type: "anime", description: "Przygody Monkey D. Luffy’ego w poszukiwaniu legendarnego skarbu.", image: "op.jpg", genre: "Shounen, Przygodowe, Akcja", episodes: 1060, episodeLength: "24 min", status: "Trwa", startDate: "1999-10-20", endDate: "" },
+{ title: "One Piece", type: "anime", description: "Przygody Monkey D. Luffy’ego w poszukiwaniu legendarnego skarbu.", image: "OP.jpg", genre: "Shounen, Przygodowe, Akcja", episodes: 1060, episodeLength: "24 min", status: "Trwa", startDate: "1999-10-20", endDate: "" },
 { title: "Tokyo Ghoul", type: "anime", description: "Mroczna historia studenta, który staje się pół-ghulem.", image: "TG.jpg", genre: "Horror, Akcja, Psychologiczne", episodes: 48, episodeLength: "24 min", status: "Zakończone", startDate: "2014-07-04", endDate: "2014-09-19" },
 {title:"Clannad",type:"anime",description:"Historia Tomoyi i Nagisy, pełna emocji i wzruszeń.",image:"clannad.jpg",genre:"Drama, Romantyczne",episodes:23,episodeLength:"24 min",status:"Zakończone",startDate:"2007-10-04",endDate:"2008-03-27",studio:"Kyoto Animation"},
 {title:"Clannad: After Story",type:"anime",description:"Kontynuacja przygód Tomoyi i Nagisy, historia pełna wzruszeń.",image:"clannadAS.jpg",genre:"Drama, Romantyczne",episodes:24,episodeLength:"24 min",status:"Zakończone",startDate:"2008-10-03",endDate:"2009-03-27",studio:"Kyoto Animation"}
@@ -209,55 +209,78 @@ const averageRatingElem = document.getElementById('averageRating');
 const voteCountElem = document.getElementById('voteCount');
 
 let userId = localStorage.getItem("userId");
-if(!userId){ userId = Date.now().toString() + Math.floor(Math.random()*1000); localStorage.setItem("userId", userId); }
+if(!userId){ 
+    userId = Date.now().toString() + Math.floor(Math.random()*1000); 
+    localStorage.setItem("userId", userId); 
+}
 
 const ratingDoc = doc(db, "ratings", titleFromURL || "default");
+let currentAvgGlobal = 0; // Ta zmienna trzyma wynik w pamięci przeglądarki
 
 async function createDocIfNotExists(){
-  const docSnap = await getDoc(ratingDoc);
-  if(!docSnap.exists()){ await setDoc(ratingDoc, {votes:0, total:0, userVoted:[]}); }
+    const docSnap = await getDoc(ratingDoc);
+    if(!docSnap.exists()){ 
+        await setDoc(ratingDoc, {votes:0, total:0, userVoted:[]}); 
+    }
 }
 
 async function saveVote(value){
-  const docSnap = await getDoc(ratingDoc);
-  const data = docSnap.data();
-  if(!data.userVoted.includes(userId)){
-    await updateDoc(ratingDoc, {votes: increment(1), total: increment(value), userVoted: arrayUnion(userId)});
-  } else {
-    alert("Już zagłosowałeś!");
-  }
+    const docSnap = await getDoc(ratingDoc);
+    const data = docSnap.data();
+    if(!data.userVoted.includes(userId)){
+        await updateDoc(ratingDoc, {
+            votes: increment(1), 
+            total: increment(value), 
+            userVoted: arrayUnion(userId)
+        });
+    } else {
+        alert("Już zagłosowałeś na ten tytuł!");
+    }
 }
 
 function updateStars(value){
-  stars.forEach(star=>{
-    if(parseInt(star.dataset.value) <= value){ star.textContent = "★"; star.classList.add("filled"); }
-    else { star.textContent = "☆"; star.classList.remove("filled"); }
-  });
+    stars.forEach(star=>{
+        if(parseInt(star.dataset.value) <= value){ 
+            star.textContent = "★"; 
+            star.classList.add("filled"); 
+        } else { 
+            star.textContent = "☆"; 
+            star.classList.remove("filled"); 
+        }
+    });
 }
 
+// Ten fragment nasłuchuje zmian w bazie i aktualizuje widok
 onSnapshot(ratingDoc, (docSnap)=>{
-  if(docSnap.exists()){
-    const data = docSnap.data();
-    const avg = data.votes ? (data.total / data.votes).toFixed(1) : 0;
-    updateStars(Math.round(avg));
-    averageRatingElem.textContent = avg + " / 10";
-    voteCountElem.textContent = data.votes + " głosów";
-  }
+    if(docSnap.exists()){
+        const data = docSnap.data();
+        currentAvgGlobal = data.votes ? (data.total / data.votes) : 0;
+        const avgFormatted = currentAvgGlobal.toFixed(1);
+        
+        updateStars(Math.round(currentAvgGlobal));
+        averageRatingElem.textContent = avgFormatted + " / 10";
+        voteCountElem.textContent = data.votes + " głosów";
+    }
 });
 
+// Obsługa myszki
 stars.forEach(star=>{
-  star.addEventListener('click', ()=>{ const value = parseInt(star.dataset.value); createDocIfNotExists().then(()=>saveVote(value)); });
-  star.addEventListener('mouseover', ()=>updateStars(parseInt(star.dataset.value)));
-  star.addEventListener('mouseout', async ()=>{
-    const docSnap = await getDoc(ratingDoc);
-    const data = docSnap.data();
-    const lastValue = data.votes ? Math.round(data.total/data.votes) : 0;
-    updateStars(lastValue);
-  });
+    // Kliknięcie - wysyła głos
+    star.addEventListener('click', ()=>{ 
+        const value = parseInt(star.dataset.value); 
+        createDocIfNotExists().then(() => saveVote(value)); 
+    });
+
+    // Najechanie myszką - podświetla gwiazdki tymczasowo
+    star.addEventListener('mouseover', () => updateStars(parseInt(star.dataset.value)));
+
+    // Zjechanie myszką - wraca do średniej oceny z bazy
+    star.addEventListener('mouseout', () => {
+        updateStars(Math.round(currentAvgGlobal));
+    });
 });
 </script>
 
 </body>
 </html>
-
 
