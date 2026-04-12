@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Anime & Games</title>
 <style>
+/* ... Twoje stare style zostają bez zmian ... */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -121,28 +122,100 @@ button:hover {
   font-size: 13px;
 }
 
-#backButton {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  padding: 12px 25px;
-  background: #ff3c3c;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: 0.3s;
-  z-index: 1000;
+/* DODANE STYLE DLA AUTH */
+.auth-buttons {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 15px;
+    z-index: 1000;
 }
 
-#backButton:hover {
-  background: #ff0000;
-  transform: scale(1.05);
+.auth-buttons button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    background: transparent;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.btn-primary { border: 2px solid #ff0000; color: white; }
+.btn-primary:hover { background: #ff0000; }
+
+.btn-secondary { border: 2px solid #555555; color: white; }
+.btn-secondary:hover { background: #555555; }
+
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.85);
+}
+
+.modal-content {
+    background-color: #1a1a1a;
+    margin: 10% auto;
+    padding: 30px;
+    border: 2px solid #ff3c3c;
+    width: 300px;
+    text-align: center;
+    color: white;
+    border-radius: 10px;
+    position: relative;
+}
+
+.modal-content input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    background: #333;
+    border: 1px solid #555;
+    color: white;
+    border-radius: 5px;
+}
+
+.close-btn { 
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    cursor: pointer; 
+    font-size: 24px; 
+}
+
+#auth-action-btn {
+    background: #ff3c3c;
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    margin-top: 10px;
+    border-radius: 5px;
 }
 </style>
 </head>
 <body>
+
+<div class="auth-buttons" id="authContainer">
+    <button id="btn-signup-trigger" class="btn-secondary">Zarejestruj się</button>
+    <button id="btn-login-trigger" class="btn-primary">Zaloguj się</button>
+</div>
+
+<div id="auth-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 id="modal-title">Zaloguj się</h2>
+        <input type="email" id="auth-email" placeholder="Email">
+        <input type="password" id="auth-password" placeholder="Hasło (min. 6 znaków)">
+        <button id="auth-action-btn">Zatwierdź</button>
+        <p id="auth-error" style="color: red; font-size: 12px; margin-top: 10px;"></p>
+    </div>
+</div>
 
 <header>
   <h1>Witaj w Anime & Games</h1>
@@ -168,6 +241,8 @@ button:hover {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
 import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+// DODANE IMPORTY AUTH
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBSA7M0IwPlj4wEWdENQUnstPuEtBMYAz8",
@@ -181,7 +256,67 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app); // Inicjalizacja Auth
 
+// --- OBSŁUGA OKIENKA MODAL ---
+const modal = document.getElementById('auth-modal');
+const modalTitle = document.getElementById('modal-title');
+const actionBtn = document.getElementById('auth-action-btn');
+const errorMsg = document.getElementById('auth-error');
+
+document.getElementById('btn-login-trigger').onclick = () => {
+    modal.style.display = "block";
+    modalTitle.innerText = "Zaloguj się";
+};
+
+document.getElementById('btn-signup-trigger').onclick = () => {
+    modal.style.display = "block";
+    modalTitle.innerText = "Zarejestruj się";
+};
+
+document.querySelector('.close-btn').onclick = () => {
+    modal.style.display = "none";
+    errorMsg.innerText = "";
+};
+
+// --- LOGOWANIE I REJESTRACJA ---
+actionBtn.onclick = async () => {
+    const email = document.getElementById('auth-email').value;
+    const pass = document.getElementById('auth-password').value;
+    
+    try {
+        if (modalTitle.innerText === "Zarejestruj się") {
+            await createUserWithEmailAndPassword(auth, email, pass);
+        } else {
+            await signInWithEmailAndPassword(auth, email, pass);
+        }
+        modal.style.display = "none";
+    } catch (error) {
+        errorMsg.innerText = "Błąd: " + error.message;
+    }
+};
+
+// --- ŚLEDZENIE STANU UŻYTKOWNIKA ---
+onAuthStateChanged(auth, (user) => {
+    const authContainer = document.getElementById('authContainer');
+    if (user) {
+        authContainer.innerHTML = `
+            <span style="color:white; font-size:12px; align-self:center">${user.email}</span>
+            <button id="btnLogout" class="btn-secondary">Wyloguj</button>
+        `;
+        document.getElementById('btnLogout').onclick = () => signOut(auth);
+    } else {
+        authContainer.innerHTML = `
+            <button id="btn-signup-trigger" class="btn-secondary">Zarejestruj się</button>
+            <button id="btn-login-trigger" class="btn-primary">Zaloguj się</button>
+        `;
+        // Ponowne podpięcie eventów po przerysowaniu HTML
+        document.getElementById('btn-login-trigger').onclick = () => { modal.style.display = "block"; modalTitle.innerText = "Zaloguj się"; };
+        document.getElementById('btn-signup-trigger').onclick = () => { modal.style.display = "block"; modalTitle.innerText = "Zarejestruj się"; };
+    }
+});
+
+// ... Reszta Twojego kodu (items, featured, loadTop10) zostaje tak jak była ...
 let items = [
   {title:"Attack on Titan",type:"anime",description:"Ludzkość walczy z Tytanami...",image:"aot.jpg"},
   {title:"Death Note",type:"anime",description:"Młody chłopak znajduje notes śmierci...",image:"DN.jpg"},
@@ -230,6 +365,7 @@ async function loadTop10(){
   const q = query(ratingsCol, orderBy("total","desc"), limit(10));
   const snapshot = await getDocs(q);
   let top10Container = document.getElementById("top10Container");
+  top10Container.innerHTML = ""; // Czyszczenie przed ładowaniem
   snapshot.forEach(doc=>{
     const data = doc.data();
     const avg = data.votes ? (data.total/data.votes).toFixed(1) : 0;
@@ -246,9 +382,8 @@ async function loadTop10(){
 
 loadTop10();
 
-// Poprawiona wyszukiwarka
 document.getElementById("searchForm").addEventListener("submit", function(e){
-  e.preventDefault(); // blokuje odświeżenie strony
+  e.preventDefault();
   const value = document.getElementById("searchInput").value.trim();
   if(value !== ""){
     window.location.href = "results.html?search=" + encodeURIComponent(value);
