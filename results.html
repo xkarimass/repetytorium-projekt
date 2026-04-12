@@ -5,6 +5,7 @@
 <title>Wyniki</title>
 
 <style>
+/* Twoje style zostają bez zmian */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -119,10 +120,101 @@ h1 {
   background: #ff0000;
   transform: scale(1.05);
 }
+
+/* Style Auth */
+.auth-buttons {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.auth-buttons button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    background: transparent;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.btn-primary { border: 2px solid #ff0000; color: white; }
+.btn-primary:hover { background: #ff0000; }
+
+.btn-secondary { border: 2px solid #555555; color: white; }
+.btn-secondary:hover { background: #555555; }
+
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.85);
+}
+
+.modal-content {
+    background-color: #1a1a1a;
+    margin: 10% auto;
+    padding: 30px;
+    border: 2px solid #ff0000;
+    width: 300px;
+    text-align: center;
+    color: white;
+    border-radius: 10px;
+    position: relative;
+}
+
+.modal-content input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    background: #333;
+    border: 1px solid #555;
+    color: white;
+    border-radius: 5px;
+}
+
+.close-btn { 
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    cursor: pointer; 
+    font-size: 24px; 
+}
+
+#auth-action-btn {
+    background: #ff0000;
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    margin-top: 10px;
+    border-radius: 5px;
+}
 </style>
 </head>
 
 <body>
+<div class="auth-buttons" id="authContainer">
+    <button id="btn-signup-trigger" class="btn-secondary">Zarejestruj się</button>
+    <button id="btn-login-trigger" class="btn-primary">Zaloguj się</button>
+</div>
+
+<div id="auth-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 id="modal-title">Zaloguj się</h2>
+        <input type="email" id="auth-email" placeholder="Email">
+        <input type="password" id="auth-password" placeholder="Hasło (min. 6 znaków)">
+        <button id="auth-action-btn">Zatwierdź</button>
+        <p id="auth-error" style="color: red; font-size: 12px; margin-top: 10px;"></p>
+    </div>
+</div>
 
 <h1>Wyniki wyszukiwania</h1>
 
@@ -140,86 +232,97 @@ h1 {
 
 <div class="container" id="resultsContainer"></div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyBSA7M0IwPlj4wEWdENQUnstPuEtBMYAz8",
+  authDomain: "projekt-da6f3.firebaseapp.com",
+  projectId: "projekt-da6f3",
+  storageBucket: "projekt-da6f3.firebasestorage.app",
+  messagingSenderId: "139807931879",
+  appId: "1:139807931879:web:3758409524b9e1cefe1142",
+  measurementId: "G-K049858GR0"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// --- OBSŁUGA AUTH UI ---
+const modal = document.getElementById('auth-modal');
+const modalTitle = document.getElementById('modal-title');
+const actionBtn = document.getElementById('auth-action-btn');
+const errorMsg = document.getElementById('auth-error');
+
+function setupAuthEvents() {
+    const loginTrig = document.getElementById('btn-login-trigger');
+    const signupTrig = document.getElementById('btn-signup-trigger');
+    
+    if(loginTrig) loginTrig.onclick = () => { modal.style.display = "block"; modalTitle.innerText = "Zaloguj się"; };
+    if(signupTrig) signupTrig.onclick = () => { modal.style.display = "block"; modalTitle.innerText = "Zarejestruj się"; };
+}
+
+document.querySelector('.close-btn').onclick = () => { modal.style.display = "none"; errorMsg.innerText = ""; };
+
+actionBtn.onclick = async () => {
+    const email = document.getElementById('auth-email').value;
+    const pass = document.getElementById('auth-password').value;
+    try {
+        if (modalTitle.innerText === "Zarejestruj się") {
+            await createUserWithEmailAndPassword(auth, email, pass);
+        } else {
+            await signInWithEmailAndPassword(auth, email, pass);
+        }
+        modal.style.display = "none";
+    } catch (error) {
+        errorMsg.innerText = "Błąd: " + error.message;
+    }
+};
+
+onAuthStateChanged(auth, (user) => {
+    const container = document.getElementById('authContainer');
+    if (user) {
+        container.innerHTML = `
+            <span style="color:white; font-size:12px; align-self:center">${user.email}</span>
+            <button id="btnLogout" class="btn-secondary">Wyloguj</button>
+        `;
+        document.getElementById('btnLogout').onclick = () => signOut(auth);
+    } else {
+        container.innerHTML = `
+            <button id="btn-signup-trigger" class="btn-secondary">Zarejestruj się</button>
+            <button id="btn-login-trigger" class="btn-primary">Zaloguj się</button>
+        `;
+        setupAuthEvents();
+    }
+});
+
+// --- TWOJA LOGIKA WYSZUKIWANIA ---
 let items = [
-  {
-    title: "Attack on Titan",
-    type: "anime",
-    description: "Ludzkość walczy z Tytanami...",
-    image: "aot.jpg"
-  },
-  {
-    title: "Death Note",
-    type: "anime",
-    description: "Młody chłopak znajduje notes śmierci...",
-    image: "DN.jpg"
-  },
-  {
-    title: "The Witcher 3",
-    type: "game",
-    description: "Przygody Geralta z Rivii...",
-    image: "wiedzmin3.jpg"
-  }
-  ,
-{ 
-  title: "Red Dead Redemption 2", 
-  type: "game", 
-  description: "Przygoda w otwartym świecie Dzikiego Zachodu", 
-  image: "rdr2.jpg" 
-}
-,
-{ 
-  title: "Naruto", 
-  type: "anime", 
-  description: "Historia młodego ninja z wioski Liścia", 
-  image: "naruto.jpg" 
-},
-{ 
-  title: "Naruto Shippuden", 
-  type: "anime", 
-  description: "Kontynuacja przygód Naruto i jego przyjaciół", 
-  image: "narutoship.jpg" 
-},
-{ 
-  title: "Boruto: Naruto Next Generations", 
-  type: "anime", 
-  description: "Opowieść o synu Naruto, Boruto", 
-  image: "boruto.jpg" 
-}
-,
-{
-  title: "The Last of Us Part I",
-  type: "game",
-  description: "Przygoda Joela i Ellie w postapokaliptycznym świecie",
-  image: "TLOU1.jpg"
-},
-{
-  title: "The Last of Us Part II",
-  type: "game",
-  description: "Kontynuacja historii Ellie i Joela",
-  image: "TLOU2.jpg"
-},
-{
-  title: "Cyberpunk 2077",
-  type: "game",
-  description: "Futurystyczne RPG w Night City",
-  image: "CB.jpg"
-},
-{title:"Grand Theft Auto III",type:"game",image:"GT3.jpg",description:"Rewolucyjna gra akcji w otwartym świecie osadzona w Liberty City."},
-{title:"Grand Theft Auto IV",type:"game",image:"GT4.jpg",description:"Historia Niko Bellica w mrocznym Liberty City."},
-{title:"Grand Theft Auto V",type:"game",image:"GT5.jpg",description:"Trzech bohaterów, ogromny świat i tryb GTA Online."},
-{title:"Grand Theft Auto: San Andreas",type:"game",image:"GTSA.jpg",description:"Kultowa historia CJ-a w stanie San Andreas."},
-{title:"Grand Theft Auto: Vice City",type:"game",image:"GTVC.jpg",description:"Neonowy klimat lat 80. i historia Tommy'ego Vercettiego."},
-{title:"Elden Ring",type:"game",image:"elden.jpg",description:"Mroczne RPG akcji w ogromnym świecie fantasy."},
-{title:"God of War",type:"game",image:"GoW.jpg",description:"Nowy rozdział historii Kratosa w nordyckiej mitologii."},
-{title:"God of War Ragnarök",type:"game",image:"GoWR.jpg",description:"Kontynuacja przygód Kratosa i Atreusa podczas Ragnaröku."},
-{title:"One Piece",type:"anime",image:"OP.jpg",description:"Przygody Monkey D. Luffy’ego w poszukiwaniu legendarnego skarbu."},
-{title:"Demon Slayer",type:"anime",image:"DS.jpg",description:"Tanjiro walczy z demonami, by uratować swoją siostrę."},
-{title:"Tokyo Ghoul",type:"anime",image:"TG.jpg",description:"Mroczna historia studenta, który staje się pół-ghulem."},
-{title:"Jujutsu Kaisen",type:"anime",image:"JJK.jpg",description:"Uczeń liceum wplątany w świat klątw i egzorcystów."},
-{title:"Clannad",type:"anime",image:"clannad.jpg",description:"Historia Tomoyi i Nagisy, pełna emocji i wzruszeń."},
-{title:"Clannad: After Story",type:"anime",image:"clannadAS.jpg",description:"Kontynuacja przygód Tomoyi i Nagisy, historia pełna wzruszeń."}
+  { title: "Attack on Titan", type: "anime", description: "Ludzkość walczy z Tytanami...", image: "aot.jpg" },
+  { title: "Death Note", type: "anime", description: "Młody chłopak znajduje notes śmierci...", image: "DN.jpg" },
+  { title: "The Witcher 3", type: "game", description: "Przygody Geralta z Rivii...", image: "wiedzmin3.jpg" },
+  { title: "Red Dead Redemption 2", type: "game", description: "Przygoda w otwartym świecie Dzikiego Zachodu", image: "rdr2.jpg" },
+  { title: "Naruto", type: "anime", description: "Historia młodego ninja z wioski Liścia", image: "naruto.jpg" },
+  { title: "Naruto Shippuden", type: "anime", description: "Kontynuacja przygód Naruto i jego przyjaciół", image: "narutoship.jpg" },
+  { title: "Boruto: Naruto Next Generations", type: "anime", description: "Opowieść o synu Naruto, Boruto", image: "boruto.jpg" },
+  { title: "The Last of Us Part I", type: "game", description: "Przygoda Joela i Ellie w postapokaliptycznym świecie", image: "TLOU1.jpg" },
+  { title: "The Last of Us Part II", type: "game", description: "Kontynuacja historii Ellie i Joela", image: "TLOU2.jpg" },
+  { title: "Cyberpunk 2077", type: "game", description: "Futurystyczne RPG w Night City", image: "CB.jpg" },
+  { title: "Grand Theft Auto III", type: "game", image: "GT3.jpg", description: "Rewolucyjna gra akcji w otwartym świecie osadzona w Liberty City." },
+  { title: "Grand Theft Auto IV", type: "game", image: "GT4.jpg", description: "Historia Niko Bellica w mrocznym Liberty City." },
+  { title: "Grand Theft Auto V", type: "game", image: "GT5.jpg", description: "Trzech bohaterów, ogromny świat i tryb GTA Online." },
+  { title: "Grand Theft Auto: San Andreas", type: "game", image: "GTSA.jpg", description: "Kultowa historia CJ-a w stanie San Andreas." },
+  { title: "Grand Theft Auto: Vice City", type: "game", image: "GTVC.jpg", description: "Neonowy klimat lat 80. i historia Tommy'ego Vercettiego." },
+  { title: "Elden Ring", type: "game", image: "elden.jpg", description: "Mroczne RPG akcji w ogromnym świecie fantasy." },
+  { title: "God of War", type: "game", image: "GoW.jpg", description: "Nowy rozdział historii Kratosa w nordyckiej mitologii." },
+  { title: "God of War Ragnarök", type: "game", image: "GoWR.jpg", description: "Kontynuacja przygód Kratosa i Atreusa podczas Ragnaröku." },
+  { title: "One Piece", type: "anime", image: "OP.jpg", description: "Przygody Monkey D. Luffy’ego w poszukiwaniu legendarnego skarbu." },
+  { title: "Demon Slayer", type: "anime", image: "DS.jpg", description: "Tanjiro walczy z demonami, by uratować swoją siostrę." },
+  { title: "Tokyo Ghoul", type: "anime", image: "TG.jpg", description: "Mroczna historia studenta, który staje się pół-ghulem." },
+  { title: "Jujutsu Kaisen", type: "anime", image: "JJK.jpg", description: "Uczeń liceum wplątany w świat klątw i egzorcystów." },
+  { title: "Clannad", type: "anime", image: "clannad.jpg", description: "Historia Tomoyi i Nagisy, pełna emocji i wzruszeń." },
+  { title: "Clannad: After Story", type: "anime", image: "clannadAS.jpg", description: "Kontynuacja przygód Tomoyi i Nagisy, historia pełna wzruszeń." }
 ];
 
 let params = new URLSearchParams(window.location.search);
@@ -228,10 +331,7 @@ let currentFilter = "all";
 
 document.getElementById("searchInput").value = decodeURIComponent(params.get("search") || "");
 
-renderResults();
-
 function renderResults() {
-
   let container = document.getElementById("resultsContainer");
   container.innerHTML = "";
 
@@ -249,7 +349,6 @@ function renderResults() {
   filtered.forEach(item => {
     let card = document.createElement("div");
     card.classList.add("card");
-
     card.innerHTML = `
       <img src="images/${item.image}">
       <div class="info">
@@ -257,29 +356,32 @@ function renderResults() {
         <p>${item.description}</p>
       </div>
     `;
-
     card.addEventListener("click", () => {
       window.location.href = "details.html?title=" + item.title;
     });
-
     container.appendChild(card);
   });
 }
 
-function filterType(type) {
+// WYPYCHANIE FUNKCJI DO WINDOW (żeby onclick w HTML działały)
+window.filterType = function(type) {
   currentFilter = type;
   renderResults();
-}
+};
 
-function newSearch() {
+window.newSearch = function() {
   const value = document.getElementById("searchInput").value.trim();
   if(value !== ""){
     window.location.href = "results.html?search=" + encodeURIComponent(value);
   }
-}
+};
+
 document.getElementById("backButton").addEventListener("click", () => {
-  window.location.href = "index.html"; // lub window.history.back();
+  window.location.href = "index.html";
 });
+
+renderResults();
+setupAuthEvents();
 </script>
 
 </body>
