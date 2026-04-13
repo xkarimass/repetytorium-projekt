@@ -11,6 +11,7 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 - HTML
 - CSS
 - JavaScript
+- Firebase
 
 ## ⚙️ Funkcjonalności
 - Wyświetlanie listy tytułów
@@ -28,3 +29,4 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 - Dodanie wyszukiwarki
 - Sortowanie po ocenie
 - Tryb ciemny / jasny
+- inne kategorie np zespoły
