@@ -19,6 +19,8 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 - Automatyczne liczenie średniej ocen
 - Dynamiczne generowanie elementów w JavaScript
 - Przyciski ocen
+- wyszukiwarka
+- sortowanie wyszukiwarky
 
 ## 📁 Struktura projektu
 - index.html – struktura strony
@@ -26,7 +28,8 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 - script.js – logika aplikacji
 
 ## 🚀 Możliwości rozwoju
-- Dodanie wyszukiwarki
 - Sortowanie po ocenie
 - Tryb ciemny / jasny
 - inne kategorie np zespoły
+- dodawanie własnych tytułów
+- dodawanie komentarzy 
