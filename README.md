@@ -26,6 +26,7 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 - index.html – struktura strony
 - style.css – stylowanie
 - script.js – logika aplikacji
+- Firebase - baza danych
 
 ## 🚀 Możliwości rozwoju
 - Sortowanie po ocenie
