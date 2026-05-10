@@ -21,6 +21,7 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 - Przyciski ocen
 - wyszukiwarka
 - sortowanie wyszukiwarky
+- Tryb ciemny / jasny
 
 ## 📁 Struktura projektu
 - index.html – struktura strony
@@ -30,7 +31,6 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 
 ## 🚀 Możliwości rozwoju
 - Sortowanie po ocenie
-- Tryb ciemny / jasny
 - inne kategorie np zespoły
 - dodawanie własnych tytułów
 - dodawanie komentarzy 
