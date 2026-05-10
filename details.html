@@ -111,6 +111,34 @@ button:hover { background: #ff0000; transform: scale(1.05); }
 
 .close-btn { position: absolute; right: 15px; top: 10px; cursor: pointer; font-size: 24px; }
 #auth-action-btn { background: #ff0000; color: white; border: none; padding: 12px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; border-radius: 5px; }
+body.light {
+  background: #f5f5f5 !important;
+  color: black !important;
+}
+
+body.light .card,
+body.light .featured-section,
+body.light .top10-section,
+body.light .container {
+  background: white !important;
+  color: black !important;
+}
+
+body.light input {
+  background: white !important;
+  color: black !important;
+}body.light .card-mini p {
+  color: black !important;
+}
+
+body.light .card h2,
+body.light .card p,
+body.light .info p,
+body.light .info {
+  color: black !important;
+}body.light .auth-buttons button {
+  color: black !important;
+}
 </style>
 </head>
 <body>
@@ -160,6 +188,9 @@ button:hover { background: #ff0000; transform: scale(1.05); }
     <button onclick="window.history.back()">⬅ Wróć</button>
   </div>
 </div>
+<button id="themeToggle" style="position:fixed;bottom:20px;left:20px;z-index:999;">
+🌙
+</button>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
@@ -332,6 +363,28 @@ stars.forEach(star=>{
 });
 
 setupAuthEvents();
+const themeBtn = document.getElementById("themeToggle");
+
+if (themeBtn) {
+  themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("light");
+
+    if (document.body.classList.contains("light")) {
+      themeBtn.textContent = "☀️";
+      localStorage.setItem("theme", "light");
+    } else {
+      themeBtn.textContent = "🌙";
+      localStorage.setItem("theme", "dark");
+    }
+  });
+
+  window.addEventListener("load", () => {
+    if (localStorage.getItem("theme") === "light") {
+      document.body.classList.add("light");
+      themeBtn.textContent = "☀️";
+    }
+  });
+}
 </script>
 </body>
 </html>
