@@ -237,6 +237,38 @@ body.light .info p,
 body.light .info {
   color: black !important;
 }
+.favorites-btn{
+
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+
+  background:#ff3c3c;
+  color:white;
+
+  padding:12px 22px;
+
+  border-radius:12px;
+
+  text-decoration:none;
+
+  font-weight:bold;
+
+  transition:0.3s;
+
+  box-shadow:0 0 15px rgba(255,0,0,0.3);
+
+}
+
+.favorites-btn:hover{
+
+  background:#ff0000;
+
+  transform:scale(1.05);
+
+  box-shadow:0 0 25px rgba(255,0,0,0.5);
+
+}
 </style>
 </head>
 <body>
@@ -245,6 +277,9 @@ body.light .info {
     <button id="btn-signup-trigger" class="btn-secondary">Zarejestruj się</button>
     <button id="btn-login-trigger" class="btn-primary">Zaloguj się</button>
 </div>
+<a href="favorites.html" class="favorites-btn">
+  ❤️ Ulubione
+</a>
 
 <div id="auth-modal" class="modal">
     <div class="modal-content">
