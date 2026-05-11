@@ -139,6 +139,59 @@ body.light .info {
 }body.light .auth-buttons button {
   color: black !important;
 }
+.comments-section {
+  margin-top: 30px;
+}
+
+#commentsContainer {
+  margin-top: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.comment {
+  background: #111;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  border-left: 3px solid #ff3c3c;
+}
+
+.comment-user {
+  color: #ff3c3c;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.comment-text {
+  color: white;
+  word-break: break-word;
+}
+
+#commentInput {
+  width: 100%;
+  min-height: 80px;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid #ff3c3c;
+  background: #111;
+  color: white;
+  resize: vertical;
+}
+
+body.light .comment {
+  background: white;
+}
+
+body.light .comment-text {
+  color: black;
+}
+
+body.light #commentInput {
+  background: white;
+  color: black;
+}
 </style>
 </head>
 <body>
@@ -181,20 +234,33 @@ body.light .info {
       </div>
       <p id="login-warning" style="color: #ff3c3c; font-size: 12px; display: none; margin-top: 10px;">Zaloguj się, aby zagłosować!</p>
     </div>
+    
 
     <p id="type"></p>
     <p id="description"></p>
     <div id="extraDetails"></div>
-    <button onclick="window.history.back()">⬅ Wróć</button>
+    <button onclick="window.history.back()">⬅ Wróć</button><button id="favBtn">🤍 Dodaj do ulubionych</button>
   </div>
 </div>
 <button id="themeToggle" style="position:fixed;bottom:20px;left:20px;z-index:999;">
 🌙
 </button>
+<div class="comments-section">
+
+  <h2>Komentarze</h2>
+
+  <div id="commentsContainer"></div>
+
+  <div id="commentForm">
+    <textarea id="commentInput" placeholder="Napisz komentarz..."></textarea>
+    <button id="sendComment">Dodaj komentarz</button>
+  </div>
+
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+import {getFirestore,doc,getDoc,setDoc,updateDoc,arrayUnion,increment,onSnapshot,collection,addDoc,query,orderBy} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -385,6 +451,104 @@ if (themeBtn) {
     }
   });
 }
+const commentsContainer = document.getElementById("commentsContainer");
+const commentInput = document.getElementById("commentInput");
+const sendComment = document.getElementById("sendComment");
+
+const commentsRef = collection(db, "comments", titleFromURL, "messages");
+
+async function addComment() {
+
+  if (!currentUser) {
+    alert("Musisz być zalogowany!");
+    return;
+  }
+
+  const text = commentInput.value.trim();
+
+  if (text === "") return;
+
+  await addDoc(commentsRef, {
+    user: currentUser.email,
+    text: text,
+    created: Date.now()
+  });
+
+  commentInput.value = "";
+}
+
+sendComment.addEventListener("click", addComment);
+
+const qComments = query(commentsRef, orderBy("created", "desc"));
+
+onSnapshot(qComments, (snapshot) => {
+
+  commentsContainer.innerHTML = "";
+
+  snapshot.forEach(doc => {
+
+    const data = doc.data();
+
+    const div = document.createElement("div");
+
+    div.className = "comment";
+
+    div.innerHTML = `
+      <div class="comment-user">${data.user}</div>
+      <div class="comment-text">${data.text}</div>
+    `;
+
+    commentsContainer.appendChild(div);
+
+  });
+
+});
+const favBtn = document.getElementById("favBtn");
+
+function getFavorites() {
+  return JSON.parse(localStorage.getItem("favorites")) || [];
+}
+
+function saveFavorites(favs) {
+  localStorage.setItem("favorites", JSON.stringify(favs));
+}
+
+function updateFavButton() {
+
+  const favs = getFavorites();
+
+  const exists = favs.find(f => f.title === selectedItem.title);
+
+  if (exists) {
+    favBtn.textContent = "❤️ W ulubionych";
+  } else {
+    favBtn.textContent = "🤍 Dodaj do ulubionych";
+  }
+}
+
+favBtn.addEventListener("click", () => {
+
+  let favs = getFavorites();
+
+  const exists = favs.find(f => f.title === selectedItem.title);
+
+  if (exists) {
+
+    favs = favs.filter(f => f.title !== selectedItem.title);
+
+  } else {
+
+    favs.push(selectedItem);
+
+  }
+
+  saveFavorites(favs);
+
+  updateFavButton();
+
+});
+
+updateFavButton();
 </script>
 </body>
 </html>
