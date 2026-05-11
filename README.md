@@ -22,9 +22,14 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 - wyszukiwarka
 - sortowanie wyszukiwarky
 - Tryb ciemny / jasny
+- dodawanie własnych tytułów
+- dodawanie ulubionych tytulow
 
 ## 📁 Struktura projektu
-- index.html – struktura strony
+- index.html – g(lowna strona) struktura strony
+- details.html-tytul stuktura strony
+- results.html=wyszukiwarka struktura strony
+- favorites.html-ulubione tytuli struktura strony
 - style.css – stylowanie
 - script.js – logika aplikacji
 - Firebase - baza danych
@@ -32,5 +37,4 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 ## 🚀 Możliwości rozwoju
 - Sortowanie po ocenie
 - inne kategorie np zespoły
-- dodawanie własnych tytułów
 - dodawanie komentarzy 
