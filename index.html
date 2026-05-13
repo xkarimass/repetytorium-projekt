@@ -297,6 +297,9 @@ select{
 <a href="favorites.html" class="favorites-btn">
   ❤️ Ulubione
 </a>
+<a href="profile.html" class="favorites-btn">
+  👤 Profil
+</a>
 <button id="openAddModal" class="favorites-btn">
   ➕ Dodaj tytuł
 </button>
@@ -304,7 +307,18 @@ select{
     <div class="modal-content">
         <span class="close-btn">&times;</span>
         <h2 id="modal-title">Zaloguj się</h2>
-        <input type="email" id="auth-email" placeholder="Email">
+
+<input
+  type="text"
+  id="auth-username"
+  placeholder="Username"
+>
+
+<input
+  type="email"
+  id="auth-email"
+  placeholder="Email"
+>
         <input type="password" id="auth-password" placeholder="Hasło (min. 6 znaków)">
         <button id="auth-action-btn">Zatwierdź</button>
         <p id="auth-error" style="color: red; font-size: 12px; margin-top: 10px;"></p>
@@ -335,10 +349,39 @@ select{
   <div class="top10-container" id="top10Container"></div>
 </div>
 
+<div id="addModal" class="modal">
+
+  <div class="modal-content">
+
+    <span id="closeAddModal" class="close-btn">&times;</span>
+
+    <h2>Dodaj własny tytuł</h2>
+
+    <input type="text" id="newTitle" placeholder="Tytuł">
+
+    <input type="text" id="newDescription" placeholder="Opis">
+
+    <input type="text" id="newImage" placeholder="Nazwa zdjęcia np naruto.jpg">
+
+    <select id="newType">
+
+      <option value="anime">Anime</option>
+      <option value="game">Gra</option>
+
+    </select>
+
+    <button id="saveNewTitle">
+      Zapisz
+    </button>
+
+  </div>
+
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
-// DODANE IMPORTY AUTH
+import {getFirestore,collection,getDocs,query,orderBy,limit,setDoc,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -355,7 +398,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app); // Inicjalizacja Auth
 
-// --- OBSŁUGA OKIENKA MODAL ---
+
 const modal = document.getElementById('auth-modal');
 const modalTitle = document.getElementById('modal-title');
 const actionBtn = document.getElementById('auth-action-btn');
@@ -376,14 +419,32 @@ document.querySelector('.close-btn').onclick = () => {
     errorMsg.innerText = "";
 };
 
-// --- LOGOWANIE I REJESTRACJA ---
+
 actionBtn.onclick = async () => {
     const email = document.getElementById('auth-email').value;
     const pass = document.getElementById('auth-password').value;
     
     try {
         if (modalTitle.innerText === "Zarejestruj się") {
-            await createUserWithEmailAndPassword(auth, email, pass);
+            const username =
+document.getElementById("auth-username").value;
+
+const userCredential =
+await createUserWithEmailAndPassword(
+  auth,
+  email,
+  pass
+);
+
+await setDoc(
+  doc(db, "users", userCredential.user.uid),
+  {
+
+    username: username,
+    email: email
+
+  }
+);
         } else {
             await signInWithEmailAndPassword(auth, email, pass);
         }
@@ -394,22 +455,83 @@ actionBtn.onclick = async () => {
 };
 
 // --- ŚLEDZENIE STANU UŻYTKOWNIKA ---
-onAuthStateChanged(auth, (user) => {
-    const authContainer = document.getElementById('authContainer');
+onAuthStateChanged(auth, async (user) => {
+
+    const authContainer =
+      document.getElementById('authContainer');
+
     if (user) {
+
+        const userRef =
+          doc(db, "users", user.uid);
+
+        const userSnap =
+          await getDoc(userRef);
+
+        let username = user.email;
+
+        if (userSnap.exists()) {
+
+            username =
+              userSnap.data().username;
+
+        }
+
         authContainer.innerHTML = `
-            <span style="color:white; font-size:12px; align-self:center">${user.email}</span>
-            <button id="btnLogout" class="btn-secondary">Wyloguj</button>
+            <span style="
+              color:white;
+              font-size:12px;
+              align-self:center
+            ">
+              👤 ${username}
+            </span>
+
+            <button
+              id="btnLogout"
+              class="btn-secondary"
+            >
+              Wyloguj
+            </button>
         `;
-        document.getElementById('btnLogout').onclick = () => signOut(auth);
+
+        document.getElementById('btnLogout')
+          .onclick = () => signOut(auth);
+
     } else {
+
         authContainer.innerHTML = `
-            <button id="btn-signup-trigger" class="btn-secondary">Zarejestruj się</button>
-            <button id="btn-login-trigger" class="btn-primary">Zaloguj się</button>
+            <button
+              id="btn-signup-trigger"
+              class="btn-secondary"
+            >
+              Zarejestruj się
+            </button>
+
+            <button
+              id="btn-login-trigger"
+              class="btn-primary"
+            >
+              Zaloguj się
+            </button>
         `;
-        // Ponowne podpięcie eventów po przerysowaniu HTML
-        document.getElementById('btn-login-trigger').onclick = () => { modal.style.display = "block"; modalTitle.innerText = "Zaloguj się"; };
-        document.getElementById('btn-signup-trigger').onclick = () => { modal.style.display = "block"; modalTitle.innerText = "Zarejestruj się"; };
+
+        document.getElementById(
+          'btn-login-trigger'
+        ).onclick = () => {
+
+            modal.style.display = "block";
+            modalTitle.innerText = "Zaloguj się";
+
+        };
+
+        document.getElementById(
+          'btn-signup-trigger'
+        ).onclick = () => {
+
+            modal.style.display = "block";
+            modalTitle.innerText = "Zarejestruj się";
+
+        };
     }
 });
 
@@ -584,33 +706,5 @@ document.getElementById("saveNewTitle")
 });
 </script>
 
-
-<div id="addModal" class="modal">
-
-  <div class="modal-content">
-
-    <span id="closeAddModal" class="close-btn">&times;</span>
-
-    <h2>Dodaj własny tytuł</h2>
-
-    <input type="text" id="newTitle" placeholder="Tytuł">
-
-    <input type="text" id="newDescription" placeholder="Opis">
-
-    <input type="text" id="newImage" placeholder="Nazwa zdjęcia np naruto.jpg">
-
-    <select id="newType">
-
-      <option value="anime">Anime</option>
-      <option value="game">Gra</option>
-
-    </select>
-
-    <button id="saveNewTitle">
-      Zapisz
-    </button>
-
-  </div>
-
-</div></body>
+</body>
 </html>
