@@ -361,7 +361,7 @@ select{
 
     <input type="text" id="newDescription" placeholder="Opis">
 
-    <input type="text" id="newImage" placeholder="Nazwa zdjęcia np naruto.jpg">
+    <input type="file" id="newImage" accept="image/*">
 
     <select id="newType">
 
@@ -661,7 +661,7 @@ function saveCustomTitles(data){
 }
 
 document.getElementById("saveNewTitle")
-.addEventListener("click", () => {
+.addEventListener("click", async () => {
 
   const title =
     document.getElementById("newTitle").value;
@@ -669,18 +669,59 @@ document.getElementById("saveNewTitle")
   const description =
     document.getElementById("newDescription").value;
 
-  const image =
-    document.getElementById("newImage").value;
+  const file =
+    document.getElementById("newImage").files[0];
 
   const type =
     document.getElementById("newType").value;
 
-  if(!title || !description || !image){
+  if(!title || !description || !file){
 
     alert("Uzupełnij wszystkie pola!");
     return;
 
   }
+
+  try{
+
+    const imageRef = ref(
+      storage,
+      "titles/" + Date.now() + "_" + file.name
+    );
+
+    await uploadBytes(imageRef, file);
+
+    const imageUrl =
+      await getDownloadURL(imageRef);
+
+    const newItem = {
+
+      title,
+      description,
+      image:imageUrl,
+      type
+
+    };
+
+    const current =
+      getCustomTitles();
+
+    current.push(newItem);
+
+    saveCustomTitles(current);
+
+    alert("Dodano nowy tytuł!");
+
+    location.reload();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert("Błąd uploadu!");
+
+  }
+
 
   const newItem = {
 
@@ -704,6 +745,14 @@ document.getElementById("saveNewTitle")
   location.reload();
 
 });
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
+}
+from "https://www.gstatic.com/firebasejs/12.10.0/firebase-storage.js";
+const storage = getStorage(app);
 </script>
 
 </body>
