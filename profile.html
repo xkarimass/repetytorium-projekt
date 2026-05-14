@@ -14,7 +14,8 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  height:100vh;
+min-height:100vh;
+padding:40px 0;
 }
 
 .profile-card{
@@ -156,6 +157,49 @@ body{
   line-height:1.5;
 
 }
+body.light{
+
+  background:#f5f5f5;
+  color:black;
+
+}
+
+body.light .profile-card{
+
+  background:white;
+  color:black;
+
+}
+
+body.light .favorite-item{
+
+  background:#ededed;
+
+}
+
+body.light .stat{
+
+  background:#ededed;
+
+}
+
+body.light .favorite-content h3{
+
+  color:#ff3c3c;
+
+}
+
+body.light .favorite-content p{
+
+  color:black;
+
+}
+
+body.light .back-btn{
+
+  color:white;
+
+}
 
 </style>
 </head>
@@ -196,6 +240,21 @@ body{
   </a>
 
 </div>
+<button id="themeToggle" style="
+position:fixed;
+bottom:20px;
+right:20px;
+z-index:999;
+padding:15px;
+border:none;
+border-radius:50%;
+background:#ff3c3c;
+color:white;
+cursor:pointer;
+font-size:20px;
+">
+🌙
+</button>
 
 <script type="module">
 
@@ -248,7 +307,7 @@ onAuthStateChanged(auth, async(user)=>{
     document.getElementById("email")
     .innerText = user.email;
 
-    // FAVORITES
+  
 
     const favorites =
     JSON.parse(
@@ -269,7 +328,14 @@ favorites.forEach(item=>{
 
   favoritesList.innerHTML += `
 
-    <div class="favorite-item">
+    <div 
+      class="favorite-item"
+      onclick="
+        window.location.href=
+        'details.html?title=${encodeURIComponent(item.title)}'
+      "
+      style="cursor:pointer;"
+    >
 
       <img
         src="images/${item.image}"
@@ -298,6 +364,49 @@ favorites.forEach(item=>{
   }else{
 
     window.location.href="index.html";
+
+  }
+
+});
+const themeBtn =
+document.getElementById("themeToggle");
+
+themeBtn.addEventListener("click",()=>{
+
+  document.body.classList.toggle("light");
+
+  if(document.body.classList.contains("light")){
+
+    themeBtn.textContent="☀️";
+
+    localStorage.setItem(
+      "theme",
+      "light"
+    );
+
+  }else{
+
+    themeBtn.textContent="🌙";
+
+    localStorage.setItem(
+      "theme",
+      "dark"
+    );
+
+  }
+
+});
+
+window.addEventListener("load",()=>{
+
+  const saved =
+  localStorage.getItem("theme");
+
+  if(saved==="light"){
+
+    document.body.classList.add("light");
+
+    themeBtn.textContent="☀️";
 
   }
 
