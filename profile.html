@@ -337,9 +337,7 @@ favorites.forEach(item=>{
       style="cursor:pointer;"
     >
 
-      <img
-        src="images/${item.image}"
-      >
+      <img src="${(item.image.startsWith('http') || item.image.startsWith('data:')) ? item.image : 'images/' + item.image}">
 
       <div class="favorite-content">
 
