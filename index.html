@@ -348,7 +348,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// --- AUTH ---
+
 const modal = document.getElementById('auth-modal');
 const modalTitle = document.getElementById('modal-title');
 const actionBtn = document.getElementById('auth-action-btn');
@@ -411,7 +411,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// --- ITEMS ---
+
 let items = [
   {title:"Attack on Titan",type:"anime",description:"Ludzkość walczy z Tytanami...",image:"aot.jpg"},
   {title:"Death Note",type:"anime",description:"Młody chłopak znajduje notes śmierci...",image:"DN.jpg"},
@@ -439,7 +439,7 @@ let items = [
   {title:"Clannad: After Story",type:"anime",description:"Kontynuacja przygód Tomoyi i Nagisy",image:"clannadAS.jpg"}
 ];
 
-// --- HELPERS ---
+
 function getImageSrc(image) {
   if (image.startsWith("data:") || image.startsWith("http")) return image;
   return "images/" + image;
@@ -497,7 +497,7 @@ function createCard(item) {
   return card;
 }
 
-// --- FEATURED ---
+
 const featuredItems = [
   {title:"Attack on Titan",image:"aot.jpg",description:"Ludzkość walczy z Tytanami..."},
   {title:"The Witcher 3",image:"wiedzmin3.jpg",description:"Przygody Geralta z Rivii..."},
@@ -508,12 +508,12 @@ const featuredItems = [
 const featuredContainer = document.getElementById("featuredContainer");
 featuredItems.forEach(item => featuredContainer.appendChild(createCard(item)));
 
-// --- CUSTOM TITLES ---
+
 const customTitles = getCustomTitles();
 items = [...items, ...customTitles];
 customTitles.forEach(item => featuredContainer.appendChild(createCard(item)));
 
-// --- TOP 10 ---
+
 async function loadTop10() {
   const ratingsCol = collection(db, "ratings");
   const q = query(ratingsCol, orderBy("total", "desc"), limit(10));
@@ -542,14 +542,14 @@ async function loadTop10() {
 
 loadTop10();
 
-// --- SEARCH ---
+
 document.getElementById("searchForm").addEventListener("submit", function(e) {
   e.preventDefault();
   const value = document.getElementById("searchInput").value.trim();
   if (value !== "") window.location.href = "results.html?search=" + encodeURIComponent(value);
 });
 
-// --- THEME ---
+
 const themeBtn = document.getElementById("themeToggle");
 themeBtn.addEventListener("click", () => {
   document.body.classList.toggle("light");
@@ -568,7 +568,7 @@ window.addEventListener("load", () => {
   }
 });
 
-// --- ADD MODAL ---
+
 const addModal = document.getElementById("addModal");
 document.getElementById("openAddModal").onclick = () => { addModal.style.display = "block"; };
 document.getElementById("closeAddModal").onclick = () => { addModal.style.display = "none"; };
@@ -583,7 +583,7 @@ document.getElementById("newType").addEventListener("change", function() {
   }
 });
 
-// --- СОХРАНЕНИЕ С СЖАТИЕМ КАРТИНКИ ---
+
 document.getElementById("saveNewTitle").addEventListener("click", () => {
   const title = document.getElementById("newTitle").value.trim();
   const description = document.getElementById("newDescription").value.trim();
@@ -595,7 +595,7 @@ document.getElementById("saveNewTitle").addEventListener("click", () => {
     return;
   }
 
-  // Сжимаем картинку перед сохранением
+ 
   compressImage(file, function(imageUrl) {
     let newItem = {
       title: title,
