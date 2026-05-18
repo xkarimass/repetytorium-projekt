@@ -5,7 +5,7 @@
 <title>Wyniki</title>
 
 <style>
-/* Twoje style zostają bez zmian */
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -121,7 +121,7 @@ h1 {
   transform: scale(1.05);
 }
 
-/* Style Auth */
+
 .auth-buttons {
     position: fixed;
     top: 20px;
@@ -293,6 +293,7 @@ body.light .info {
 </div>
 
 <div class="container" id="resultsContainer"></div>
+
 <button id="themeToggle" style="position:fixed;bottom:20px;left:20px;z-index:999;">
 🌙
 </button>
@@ -314,7 +315,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// --- OBSŁUGA AUTH UI ---
+
 const modal = document.getElementById('auth-modal');
 const modalTitle = document.getElementById('modal-title');
 const actionBtn = document.getElementById('auth-action-btn');
@@ -362,7 +363,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// --- TWOJA LOGIKA WYSZUKIWANIA ---
+
 let items = [
   { title: "Attack on Titan", type: "anime", description: "Ludzkość walczy z Tytanami...", image: "aot.jpg" },
   { title: "Death Note", type: "anime", description: "Młody chłopak znajduje notes śmierci...", image: "DN.jpg" },
@@ -389,6 +390,8 @@ let items = [
   { title: "Clannad", type: "anime", image: "clannad.jpg", description: "Historia Tomoyi i Nagisy, pełna emocji i wzruszeń." },
   { title: "Clannad: After Story", type: "anime", image: "clannadAS.jpg", description: "Kontynuacja przygód Tomoyi i Nagisy, historia pełna wzruszeń." }
 ];
+const customTitles = JSON.parse(localStorage.getItem("customTitles")) || [];
+items = [...items, ...customTitles];
 
 let params = new URLSearchParams(window.location.search);
 let searchValue = params.get("search")?.toLowerCase() || "";
@@ -414,13 +417,17 @@ function renderResults() {
   filtered.forEach(item => {
     let card = document.createElement("div");
     card.classList.add("card");
-    card.innerHTML = `
-      <img src="images/${item.image}">
-      <div class="info">
-        <h2>${item.title}</h2>
-        <p>${item.description}</p>
-      </div>
-    `;
+    const imgSrc = (item.image.startsWith("data:") || item.image.startsWith("http"))
+  ? item.image
+  : "images/" + item.image;
+
+card.innerHTML = `
+  <img src="${imgSrc}">
+  <div class="info">
+    <h2>${item.title}</h2>
+    <p>${item.description}</p>
+  </div>
+`;
     card.addEventListener("click", () => {
       window.location.href = "details.html?title=" + item.title;
     });
@@ -428,7 +435,7 @@ function renderResults() {
   });
 }
 
-// WYPYCHANIE FUNKCJI DO WINDOW (żeby onclick w HTML działały)
+
 window.filterType = function(type) {
   currentFilter = type;
   renderResults();
