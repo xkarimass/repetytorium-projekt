@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Anime & Games</title>
 <style>
-/* ... Twoje stare style zostają bez zmian ... */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -122,7 +121,6 @@ button:hover {
   font-size: 13px;
 }
 
-/* DODANE STYLE DLA AUTH */
 .auth-buttons {
     position: fixed;
     top: 20px;
@@ -149,19 +147,20 @@ button:hover {
 .btn-secondary:hover { background: #555555; }
 
 .modal {
-    display: none; 
+    display: none;
     position: fixed;
     z-index: 2000;
     left: 0; top: 0; width: 100%; height: 100%;
     background-color: rgba(0,0,0,0.85);
+    overflow-y: auto;
 }
 
 .modal-content {
     background-color: #1a1a1a;
-    margin: 10% auto;
+    margin: 5% auto;
     padding: 30px;
     border: 2px solid #ff3c3c;
-    width: 300px;
+    width: 340px;
     text-align: center;
     color: white;
     border-radius: 10px;
@@ -171,19 +170,20 @@ button:hover {
 .modal-content input {
     width: 90%;
     padding: 10px;
-    margin: 10px 0;
+    margin: 6px 0;
     background: #333;
     border: 1px solid #555;
     color: white;
     border-radius: 5px;
+    font-size: 14px;
 }
 
-.close-btn { 
+.close-btn {
     position: absolute;
     right: 15px;
     top: 10px;
-    cursor: pointer; 
-    font-size: 24px; 
+    cursor: pointer;
+    font-size: 24px;
 }
 
 #auth-action-btn {
@@ -196,95 +196,55 @@ button:hover {
     font-weight: bold;
     margin-top: 10px;
     border-radius: 5px;
-}body.light {
-  background: #f5f5f5;
-  color: black;
 }
 
-body.light .featured-section,
-body.light .top10-section {
-  background: #ffffff;
-  color: black;
+body.light { background: #f5f5f5; color: black; }
+body.light .featured-section, body.light .top10-section { background: #ffffff; color: black; }
+body.light input { background: white !important; color: black !important; border: 2px solid #ff3c3c; }
+body.light .btn-primary { color: black !important; border: 2px solid #ff0000; }
+body.light .btn-secondary { color: black !important; border: 2px solid #555; }
+body.light header h1 { color: #ff3c3c; }
+body.light .card-mini { color: black !important; background: white !important; }
+body.light .card-mini p { color: black !important; }
+body.light .card h2, body.light .card p, body.light .info p, body.light .info { color: black !important; }
+
+.favorites-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ff3c3c;
+  color: white;
+  padding: 12px 22px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+  box-shadow: 0 0 15px rgba(255,0,0,0.3);
 }
 
-body.light input {
-  background: white;
-  color: black;
-}body.light .btn-primary {
-  color: black !important;
-  border: 2px solid #ff0000;
+.favorites-btn:hover {
+  background: #ff0000;
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(255,0,0,0.5);
 }
 
-body.light .btn-secondary {
-  color: black !important;
-  border: 2px solid #555;
-}body.light input {
-  background: white !important;
-  color: black !important;
-  border: 2px solid #ff3c3c;
-}body.light header h1 {
+select {
+  width: 90%;
+  padding: 10px;
+  margin: 6px 0;
+  background: #333;
+  color: white;
+  border-radius: 5px;
+  border: 1px solid #555;
+  font-size: 14px;
+}
+
+.fields-label {
   color: #ff3c3c;
-}body.light .card-mini {
-  color: black !important;
-  background: white !important;
-}body.light .card-mini p {
-  color: black !important;
-}
-
-body.light .card h2,
-body.light .card p,
-body.light .info p,
-body.light .info {
-  color: black !important;
-}
-.favorites-btn{
-
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-
-  background:#ff3c3c;
-  color:white;
-
-  padding:12px 22px;
-
-  border-radius:12px;
-
-  text-decoration:none;
-
-  font-weight:bold;
-
-  transition:0.3s;
-
-  box-shadow:0 0 15px rgba(255,0,0,0.3);
-
-}
-
-.favorites-btn:hover{
-
-  background:#ff0000;
-
-  transform:scale(1.05);
-
-  box-shadow:0 0 25px rgba(255,0,0,0.5);
-
-}
-select{
-
-  width:90%;
-
-  padding:10px;
-
-  margin:10px 0;
-
-  background:#333;
-
-  color:white;
-
-  border-radius:5px;
-
-  border:1px solid #555;
-
+  font-size: 13px;
+  margin: 10px 0 4px 0;
+  text-align: left;
+  padding-left: 5%;
 }
 </style>
 </head>
@@ -294,31 +254,17 @@ select{
     <button id="btn-signup-trigger" class="btn-secondary">Zarejestruj się</button>
     <button id="btn-login-trigger" class="btn-primary">Zaloguj się</button>
 </div>
-<a href="favorites.html" class="favorites-btn">
-  ❤️ Ulubione
-</a>
-<a href="profile.html" class="favorites-btn">
-  👤 Profil
-</a>
-<button id="openAddModal" class="favorites-btn">
-  ➕ Dodaj tytuł
-</button>
+
+<a href="favorites.html" class="favorites-btn">❤️ Ulubione</a>
+<a href="profile.html" class="favorites-btn">👤 Profil</a>
+<button id="openAddModal" class="favorites-btn">➕ Dodaj tytuł</button>
+
 <div id="auth-modal" class="modal">
     <div class="modal-content">
         <span class="close-btn">&times;</span>
         <h2 id="modal-title">Zaloguj się</h2>
-
-<input
-  type="text"
-  id="auth-username"
-  placeholder="Username"
->
-
-<input
-  type="email"
-  id="auth-email"
-  placeholder="Email"
->
+        <input type="text" id="auth-username" placeholder="Username">
+        <input type="email" id="auth-email" placeholder="Email">
         <input type="password" id="auth-password" placeholder="Hasło (min. 6 znaków)">
         <button id="auth-action-btn">Zatwierdź</button>
         <p id="auth-error" style="color: red; font-size: 12px; margin-top: 10px;"></p>
@@ -327,9 +273,7 @@ select{
 
 <header>
   <h1>Witaj w Anime & Games</h1>
-  <button id="themeToggle" style="position:fixed;bottom:20px;right:20px;z-index:999;">
-🌙
-</button>
+  <button id="themeToggle" style="position:fixed;bottom:20px;right:20px;z-index:999;">🌙</button>
 </header>
 
 <div class="search-box">
@@ -350,38 +294,44 @@ select{
 </div>
 
 <div id="addModal" class="modal">
-
   <div class="modal-content">
-
     <span id="closeAddModal" class="close-btn">&times;</span>
-
     <h2>Dodaj własny tytuł</h2>
 
     <input type="text" id="newTitle" placeholder="Tytuł">
-
     <input type="text" id="newDescription" placeholder="Opis">
-
-    <input type="file" id="newImage" accept="image/*">
+    <input type="file" id="newImage" accept="image/*" style="width:90%;margin:6px 0;font-size:13px;color:white;">
 
     <select id="newType">
-
       <option value="anime">Anime</option>
       <option value="game">Gra</option>
-
     </select>
 
-    <button id="saveNewTitle">
-      Zapisz
-    </button>
+    <div id="animeFields">
+      <p class="fields-label">🎌 Szczegóły anime:</p>
+      <input type="text" id="newGenre" placeholder="Gatunek (np. Akcja, Dramat)">
+      <input type="number" id="newEpisodes" placeholder="Liczba odcinków">
+      <input type="text" id="newEpisodeLength" placeholder="Czas odcinka (np. 24 min)">
+      <input type="text" id="newStatus" placeholder="Status (np. Zakończone)">
+      <input type="text" id="newStartDate" placeholder="Data rozpoczęcia (np. 2020-01-01)">
+      <input type="text" id="newEndDate" placeholder="Data zakończenia">
+    </div>
 
+    <div id="gameFields" style="display:none;">
+      <p class="fields-label">🎮 Szczegóły gry:</p>
+      <input type="text" id="newGenreGame" placeholder="Gatunek (np. RPG, Akcja)">
+      <input type="text" id="newReleaseYear" placeholder="Rok wydania">
+      <input type="text" id="newStudio" placeholder="Studio">
+      <input type="text" id="newPlatform" placeholder="Platforma (np. PC, PS5)">
+    </div>
+
+    <button id="saveNewTitle" style="width:90%;margin-top:12px;margin-left:0;">Zapisz</button>
   </div>
-
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import {getFirestore,collection,getDocs,query,orderBy,limit,setDoc,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
-
+import { getFirestore, collection, getDocs, query, orderBy, limit, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -396,9 +346,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app); // Inicjalizacja Auth
+const auth = getAuth(app);
 
-
+// --- AUTH ---
 const modal = document.getElementById('auth-modal');
 const modalTitle = document.getElementById('modal-title');
 const actionBtn = document.getElementById('auth-action-btn');
@@ -419,32 +369,17 @@ document.querySelector('.close-btn').onclick = () => {
     errorMsg.innerText = "";
 };
 
-
 actionBtn.onclick = async () => {
     const email = document.getElementById('auth-email').value;
     const pass = document.getElementById('auth-password').value;
-    
     try {
         if (modalTitle.innerText === "Zarejestruj się") {
-            const username =
-document.getElementById("auth-username").value;
-
-const userCredential =
-await createUserWithEmailAndPassword(
-  auth,
-  email,
-  pass
-);
-
-await setDoc(
-  doc(db, "users", userCredential.user.uid),
-  {
-
-    username: username,
-    email: email
-
-  }
-);
+            const username = document.getElementById("auth-username").value;
+            const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+            await setDoc(doc(db, "users", userCredential.user.uid), {
+                username: username,
+                email: email
+            });
         } else {
             await signInWithEmailAndPassword(auth, email, pass);
         }
@@ -454,88 +389,29 @@ await setDoc(
     }
 };
 
-// --- ŚLEDZENIE STANU UŻYTKOWNIKA ---
 onAuthStateChanged(auth, async (user) => {
-
-    const authContainer =
-      document.getElementById('authContainer');
-
+    const authContainer = document.getElementById('authContainer');
     if (user) {
-
-        const userRef =
-          doc(db, "users", user.uid);
-
-        const userSnap =
-          await getDoc(userRef);
-
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
         let username = user.email;
-
-        if (userSnap.exists()) {
-
-            username =
-              userSnap.data().username;
-
-        }
-
+        if (userSnap.exists()) username = userSnap.data().username;
         authContainer.innerHTML = `
-            <span style="
-              color:white;
-              font-size:12px;
-              align-self:center
-            ">
-              👤 ${username}
-            </span>
-
-            <button
-              id="btnLogout"
-              class="btn-secondary"
-            >
-              Wyloguj
-            </button>
+            <span style="color:white;font-size:12px;align-self:center">👤 ${username}</span>
+            <button id="btnLogout" class="btn-secondary">Wyloguj</button>
         `;
-
-        document.getElementById('btnLogout')
-          .onclick = () => signOut(auth);
-
+        document.getElementById('btnLogout').onclick = () => signOut(auth);
     } else {
-
         authContainer.innerHTML = `
-            <button
-              id="btn-signup-trigger"
-              class="btn-secondary"
-            >
-              Zarejestruj się
-            </button>
-
-            <button
-              id="btn-login-trigger"
-              class="btn-primary"
-            >
-              Zaloguj się
-            </button>
+            <button id="btn-signup-trigger" class="btn-secondary">Zarejestruj się</button>
+            <button id="btn-login-trigger" class="btn-primary">Zaloguj się</button>
         `;
-
-        document.getElementById(
-          'btn-login-trigger'
-        ).onclick = () => {
-
-            modal.style.display = "block";
-            modalTitle.innerText = "Zaloguj się";
-
-        };
-
-        document.getElementById(
-          'btn-signup-trigger'
-        ).onclick = () => {
-
-            modal.style.display = "block";
-            modalTitle.innerText = "Zarejestruj się";
-
-        };
+        document.getElementById('btn-login-trigger').onclick = () => { modal.style.display = "block"; modalTitle.innerText = "Zaloguj się"; };
+        document.getElementById('btn-signup-trigger').onclick = () => { modal.style.display = "block"; modalTitle.innerText = "Zarejestruj się"; };
     }
 });
 
-// ... Reszta Twojego kodu (items, featured, loadTop10) zostaje tak jak była ...
+// --- ITEMS ---
 let items = [
   {title:"Attack on Titan",type:"anime",description:"Ludzkość walczy z Tytanami...",image:"aot.jpg"},
   {title:"Death Note",type:"anime",description:"Młody chłopak znajduje notes śmierci...",image:"DN.jpg"},
@@ -563,37 +439,102 @@ let items = [
   {title:"Clannad: After Story",type:"anime",description:"Kontynuacja przygód Tomoyi i Nagisy",image:"clannadAS.jpg"}
 ];
 
-let featuredItems = [
+// --- HELPERS ---
+function getImageSrc(image) {
+  if (image.startsWith("data:") || image.startsWith("http")) return image;
+  return "images/" + image;
+}
+
+function getCustomTitles() {
+  return JSON.parse(localStorage.getItem("customTitles")) || [];
+}
+
+function saveCustomTitles(data) {
+  try {
+    localStorage.setItem("customTitles", JSON.stringify(data));
+    return true;
+  } catch(e) {
+    alert("Błąd: za mało miejsca w localStorage! Usuń stare tytuły.");
+    return false;
+  }
+}
+
+function compressImage(file, callback) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement("canvas");
+      const MAX = 400;
+      let w = img.width;
+      let h = img.height;
+      if (w > h) {
+        if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      } else {
+        if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+      callback(canvas.toDataURL("image/jpeg", 0.7));
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function createCard(item) {
+  const card = document.createElement("div");
+  card.className = "card-mini";
+  card.innerHTML = `
+    <img src="${getImageSrc(item.image)}">
+    <h3>${item.title}</h3>
+    <p>${item.description}</p>
+  `;
+  card.addEventListener("click", () => {
+    window.location.href = "details.html?title=" + encodeURIComponent(item.title);
+  });
+  return card;
+}
+
+// --- FEATURED ---
+const featuredItems = [
   {title:"Attack on Titan",image:"aot.jpg",description:"Ludzkość walczy z Tytanami..."},
   {title:"The Witcher 3",image:"wiedzmin3.jpg",description:"Przygody Geralta z Rivii..."},
   {title:"Naruto",image:"naruto.jpg",description:"Historia młodego ninja z wioski Liścia"},
   {title:"Elden Ring",image:"elden.jpg",description:"Mroczne RPG akcji w ogromnym świecie fantasy"}
 ];
 
-let featuredContainer = document.getElementById("featuredContainer");
-featuredItems.forEach(item=>{
-  let card = document.createElement("div");
-  card.className = "card-mini";
-  card.innerHTML=`<img src="images/${item.image}"><h3>${item.title}</h3><p>${item.description}</p>`;
-  card.addEventListener("click",()=>window.location.href="details.html?title="+item.title);
-  featuredContainer.appendChild(card);
-});
+const featuredContainer = document.getElementById("featuredContainer");
+featuredItems.forEach(item => featuredContainer.appendChild(createCard(item)));
 
-async function loadTop10(){
-  const ratingsCol = collection(db,"ratings");
-  const q = query(ratingsCol, orderBy("total","desc"), limit(10));
+// --- CUSTOM TITLES ---
+const customTitles = getCustomTitles();
+items = [...items, ...customTitles];
+customTitles.forEach(item => featuredContainer.appendChild(createCard(item)));
+
+// --- TOP 10 ---
+async function loadTop10() {
+  const ratingsCol = collection(db, "ratings");
+  const q = query(ratingsCol, orderBy("total", "desc"), limit(10));
   const snapshot = await getDocs(q);
-  let top10Container = document.getElementById("top10Container");
-  top10Container.innerHTML = ""; // Czyszczenie przed ładowaniem
-  snapshot.forEach(doc=>{
-    const data = doc.data();
-    const avg = data.votes ? (data.total/data.votes).toFixed(1) : 0;
-    const card = document.createElement("div");
-    card.className = "card-mini";
-    const item = items.find(i=>i.title===doc.id);
-    if(item){
-      card.innerHTML = `<img src="images/${item.image}"><h3>${item.title}</h3><p>Średnia: ${avg} / 10</p>`;
-      card.addEventListener("click",()=>window.location.href="details.html?title="+item.title);
+  const top10Container = document.getElementById("top10Container");
+  top10Container.innerHTML = "";
+  snapshot.forEach(d => {
+    const data = d.data();
+    const avg = data.votes ? (data.total / data.votes).toFixed(1) : 0;
+    const item = items.find(i => i.title === d.id);
+    if (item) {
+      const card = document.createElement("div");
+      card.className = "card-mini";
+      card.innerHTML = `
+        <img src="${getImageSrc(item.image)}">
+        <h3>${item.title}</h3>
+        <p>Średnia: ${avg} / 10</p>
+      `;
+      card.addEventListener("click", () => {
+        window.location.href = "details.html?title=" + encodeURIComponent(item.title);
+      });
       top10Container.appendChild(card);
     }
   });
@@ -601,18 +542,17 @@ async function loadTop10(){
 
 loadTop10();
 
-document.getElementById("searchForm").addEventListener("submit", function(e){
+// --- SEARCH ---
+document.getElementById("searchForm").addEventListener("submit", function(e) {
   e.preventDefault();
   const value = document.getElementById("searchInput").value.trim();
-  if(value !== ""){
-    window.location.href = "results.html?search=" + encodeURIComponent(value);
-  }
+  if (value !== "") window.location.href = "results.html?search=" + encodeURIComponent(value);
 });
-const themeBtn = document.getElementById("themeToggle");
 
+// --- THEME ---
+const themeBtn = document.getElementById("themeToggle");
 themeBtn.addEventListener("click", () => {
   document.body.classList.toggle("light");
-
   if (document.body.classList.contains("light")) {
     themeBtn.textContent = "☀️";
     localStorage.setItem("theme", "light");
@@ -621,138 +561,73 @@ themeBtn.addEventListener("click", () => {
     localStorage.setItem("theme", "dark");
   }
 });
-
-
 window.addEventListener("load", () => {
-  const saved = localStorage.getItem("theme");
-
-  if (saved === "light") {
+  if (localStorage.getItem("theme") === "light") {
     document.body.classList.add("light");
     themeBtn.textContent = "☀️";
   }
 });
+
+// --- ADD MODAL ---
 const addModal = document.getElementById("addModal");
+document.getElementById("openAddModal").onclick = () => { addModal.style.display = "block"; };
+document.getElementById("closeAddModal").onclick = () => { addModal.style.display = "none"; };
 
-document.getElementById("openAddModal").onclick = () => {
+document.getElementById("newType").addEventListener("change", function() {
+  if (this.value === "anime") {
+    document.getElementById("animeFields").style.display = "block";
+    document.getElementById("gameFields").style.display = "none";
+  } else {
+    document.getElementById("animeFields").style.display = "none";
+    document.getElementById("gameFields").style.display = "block";
+  }
+});
 
-  addModal.style.display = "block";
+// --- СОХРАНЕНИЕ С СЖАТИЕМ КАРТИНКИ ---
+document.getElementById("saveNewTitle").addEventListener("click", () => {
+  const title = document.getElementById("newTitle").value.trim();
+  const description = document.getElementById("newDescription").value.trim();
+  const file = document.getElementById("newImage").files[0];
+  const type = document.getElementById("newType").value;
 
-};
-
-document.getElementById("closeAddModal").onclick = () => {
-
-  addModal.style.display = "none";
-
-};
-
-function getCustomTitles(){
-
-  return JSON.parse(localStorage.getItem("customTitles")) || [];
-
-}
-
-function saveCustomTitles(data){
-
-  localStorage.setItem(
-    "customTitles",
-    JSON.stringify(data)
-  );
-
-}
-
-document.getElementById("saveNewTitle")
-.addEventListener("click", async () => {
-
-  const title =
-    document.getElementById("newTitle").value;
-
-  const description =
-    document.getElementById("newDescription").value;
-
-  const file =
-    document.getElementById("newImage").files[0];
-
-  const type =
-    document.getElementById("newType").value;
-
-  if(!title || !description || !file){
-
+  if (!title || !description || !file) {
     alert("Uzupełnij wszystkie pola!");
     return;
-
   }
 
-  try{
-
-    const imageRef = ref(
-      storage,
-      "titles/" + Date.now() + "_" + file.name
-    );
-
-    await uploadBytes(imageRef, file);
-
-    const imageUrl =
-      await getDownloadURL(imageRef);
-
-    const newItem = {
-
-      title,
-      description,
-      image:imageUrl,
-      type
-
+  // Сжимаем картинку перед сохранением
+  compressImage(file, function(imageUrl) {
+    let newItem = {
+      title: title,
+      description: description,
+      image: imageUrl,
+      type: type
     };
 
-    const current =
-      getCustomTitles();
+    if (type === "anime") {
+      newItem.genre = document.getElementById("newGenre").value;
+      newItem.episodes = document.getElementById("newEpisodes").value;
+      newItem.episodeLength = document.getElementById("newEpisodeLength").value;
+      newItem.status = document.getElementById("newStatus").value;
+      newItem.startDate = document.getElementById("newStartDate").value;
+      newItem.endDate = document.getElementById("newEndDate").value;
+    } else {
+      newItem.genre = document.getElementById("newGenreGame").value;
+      newItem.releaseYear = document.getElementById("newReleaseYear").value;
+      newItem.studio = document.getElementById("newStudio").value;
+      newItem.platform = document.getElementById("newPlatform").value;
+    }
 
+    const current = getCustomTitles();
     current.push(newItem);
-
-    saveCustomTitles(current);
-
-    alert("Dodano nowy tytuł!");
-
-    location.reload();
-
-  }catch(error){
-
-    console.error(error);
-
-    alert("Błąd uploadu!");
-
-  }
-
-
-  const newItem = {
-
-    title,
-    description,
-    image,
-    type
-
-  };
-
-  const current = getCustomTitles();
-
-  current.push(newItem);
-
-  saveCustomTitles(current);
-
-  items.push(newItem);
-
-  alert("Dodano nowy tytuł!");
-
-  location.reload();
-
+    const saved = saveCustomTitles(current);
+    if (saved) {
+      alert("Dodano nowy tytuł!");
+      location.reload();
+    }
+  });
 });
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL
-}
-from "https://www.gstatic.com/firebasejs/12.10.0/firebase-storage.js";
-const storage = getStorage(app);
+
 </script>
 
 </body>
