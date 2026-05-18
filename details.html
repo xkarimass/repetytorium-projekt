@@ -2,46 +2,110 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<title>Szczegóły</title>
+<title>Wyniki</title>
+
 <style>
 /* Twoje style zostają bez zmian */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: radial-gradient(circle at top, #111 0%, #000 70%);
+  background: #121212;
   color: white;
+}
+
+h1 {
+  text-align: center;
+  padding-top: 20px;
+  color: #ff3c3c;
+}
+
+.top-bar {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  gap: 10px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.top-bar input {
+  padding: 10px;
+  width: 200px;
+  border-radius: 8px;
+  border: 2px solid #ff3c3c;
+  background: #000;
+  color: white;
+}
+
+.top-bar input:focus {
+  outline: none;
+  border-color: #ff0000;
+  box-shadow: 0 0 10px #ff0000;
+}
+
+.top-bar button {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #1a1a1a;
+  color: #ff3c3c;
+  transition: 0.3s;
+}
+
+.top-bar button:hover {
+  background: #ff0000;
+  color: white;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  justify-content: center;
+  gap: 25px;
+  padding: 40px 20px;
 }
 
 .card {
-  display: flex;
   background: #1a1a1a;
-  border-radius: 20px;
+  border-radius: 12px;
+  display: flex;
   overflow: hidden;
-  width: 1000px;
-  max-width: 95%;
-  box-shadow: 0 0 60px rgba(255, 0, 0, 0.4);
-  transition: 0.3s ease;
+  cursor: pointer;
+  transition: 0.3s;
+  height: 150px;
+  box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
 }
 
-.card:hover { transform: scale(1.01); }
-.card img { width: 400px; object-fit: cover; }
-.info { padding: 40px; flex: 1; }
-.info h1 { color: #ff3c3c; margin-top: 0; font-size: 32px; }
-.rating-container { margin: 15px 0 25px 0; }
-.stars { font-size: 26px; cursor: pointer; letter-spacing: 3px; }
-.star { transition: 0.2s ease; }
-.star:hover { transform: scale(1.2); }
-.stars .filled { color: #ff3c3c; }
-#averageRating { font-weight: bold; font-size: 18px; color: #ff3c3c; }
-#voteCount { font-size: 13px; color: #aaa; }
-.info p { margin: 6px 0; font-size: 15px; }
+.card:hover {
+  transform: scale(1.05);
+  background: #222;
+  box-shadow: 0 0 20px #ff3c3c;
+}
 
-button {
-  margin-top: 30px;
+.card img {
+  width: 110px;
+  object-fit: cover;
+  border-right: 2px solid #ff3c3c;
+}
+
+.card .info {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card h2 {
+  margin: 0 0 10px 0;
+  color: #ff3c3c;
+}
+
+.card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+#backButton {
   padding: 12px 25px;
   background: #ff3c3c;
   border: none;
@@ -52,7 +116,10 @@ button {
   transition: 0.3s;
 }
 
-button:hover { background: #ff0000; transform: scale(1.05); }
+#backButton:hover {
+  background: #ff0000;
+  transform: scale(1.05);
+}
 
 /* Style Auth */
 .auth-buttons {
@@ -76,6 +143,7 @@ button:hover { background: #ff0000; transform: scale(1.05); }
 
 .btn-primary { border: 2px solid #ff0000; color: white; }
 .btn-primary:hover { background: #ff0000; }
+
 .btn-secondary { border: 2px solid #555555; color: white; }
 .btn-secondary:hover { background: #555555; }
 
@@ -109,8 +177,25 @@ button:hover { background: #ff0000; transform: scale(1.05); }
     border-radius: 5px;
 }
 
-.close-btn { position: absolute; right: 15px; top: 10px; cursor: pointer; font-size: 24px; }
-#auth-action-btn { background: #ff0000; color: white; border: none; padding: 12px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; border-radius: 5px; }
+.close-btn { 
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    cursor: pointer; 
+    font-size: 24px; 
+}
+
+#auth-action-btn {
+    background: #ff0000;
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    margin-top: 10px;
+    border-radius: 5px;
+}
 body.light {
   background: #f5f5f5 !important;
   color: black !important;
@@ -136,66 +221,47 @@ body.light .card p,
 body.light .info p,
 body.light .info {
   color: black !important;
+}body.light .top-bar button {
+  background: white !important;
+  color: black !important;
+  border: 2px solid #ff3c3c;
 }body.light .auth-buttons button {
   color: black !important;
 }
-.comments-section {
-  margin-top: 30px;
+.back-btn,
+#themeToggle{
+
+  background:#ff4b4b;
+  border:none;
+  color:white;
+
+  padding:12px 22px;
+
+  border-radius:12px;
+
+  font-size:16px;
+  font-weight:bold;
+
+  cursor:pointer;
+
+  transition:0.3s;
+
+  box-shadow:0 0 15px rgba(255,75,75,0.4);
+
 }
 
-#commentsContainer {
-  margin-top: 20px;
-  max-height: 300px;
-  overflow-y: auto;
-}
+.back-btn:hover,
+#themeToggle:hover{
 
-.comment {
-  background: #111;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 15px;
-  border-left: 3px solid #ff3c3c;
-}
+  background:#ff2f2f;
 
-.comment-user {
-  color: #ff3c3c;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
+  transform:scale(1.05);
 
-.comment-text {
-  color: white;
-  word-break: break-word;
-}
-
-#commentInput {
-  width: 100%;
-  min-height: 80px;
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 2px solid #ff3c3c;
-  background: #111;
-  color: white;
-  resize: vertical;
-}
-
-body.light .comment {
-  background: white;
-}
-
-body.light .comment-text {
-  color: black;
-}
-
-body.light #commentInput {
-  background: white;
-  color: black;
 }
 </style>
 </head>
-<body>
 
+<body>
 <div class="auth-buttons" id="authContainer">
     <button id="btn-signup-trigger" class="btn-secondary">Zarejestruj się</button>
     <button id="btn-login-trigger" class="btn-primary">Zaloguj się</button>
@@ -212,55 +278,28 @@ body.light #commentInput {
     </div>
 </div>
 
-<div class="card">
-  <img id="cover">
-  <div class="info">
-    <h1 id="title"></h1>
+<h1>Wyniki wyszukiwania</h1>
 
-    <div class="rating-container">
-      <div id="averageRating">0 / 10</div>
-      <div id="voteCount">0 głosów</div>
-      <div class="stars">
-        <span class="star" data-value="1">☆</span>
-        <span class="star" data-value="2">☆</span>
-        <span class="star" data-value="3">☆</span>
-        <span class="star" data-value="4">☆</span>
-        <span class="star" data-value="5">☆</span>
-        <span class="star" data-value="6">☆</span>
-        <span class="star" data-value="7">☆</span>
-        <span class="star" data-value="8">☆</span>
-        <span class="star" data-value="9">☆</span>
-        <span class="star" data-value="10">☆</span>
-      </div>
-      <p id="login-warning" style="color: #ff3c3c; font-size: 12px; display: none; margin-top: 10px;">Zaloguj się, aby zagłosować!</p>
-    </div>
-    
-
-    <p id="type"></p>
-    <p id="description"></p>
-    <div id="extraDetails"></div>
-    <button onclick="window.history.back()">⬅ Wróć</button><button id="favBtn">🤍 Dodaj do ulubionych</button>
-  </div>
+<div style="text-align:center; margin:20px;">
+  <button id="backButton">Wróć</button>
 </div>
+
+<div class="top-bar">
+  <input type="text" id="searchInput" placeholder="Wyszukaj...">
+  <button onclick="newSearch()">Szukaj</button>
+  <button onclick="filterType('all')">Wszystko</button>
+  <button onclick="filterType('anime')">Tylko Anime</button>
+  <button onclick="filterType('game')">Tylko Gry</button>
+</div>
+
+<div class="container" id="resultsContainer"></div>
+
 <button id="themeToggle" style="position:fixed;bottom:20px;left:20px;z-index:999;">
 🌙
 </button>
-<div class="comments-section">
-
-  <h2>Komentarze</h2>
-
-  <div id="commentsContainer"></div>
-
-  <div id="commentForm">
-    <textarea id="commentInput" placeholder="Napisz komentarz..."></textarea>
-    <button id="sendComment">Dodaj komentarz</button>
-  </div>
-
-</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import {getFirestore,doc,getDoc,setDoc,updateDoc,arrayUnion,increment,onSnapshot,collection,addDoc,query,orderBy} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -274,60 +313,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 const auth = getAuth(app);
 
-let currentUser = null;
 
-// --- TWOJE DANE ITEMS ---
-let items = [
-  { title: "Attack on Titan", type: "anime", description: "Ludzkość walczy z Tytanami...", image: "aot.jpg", genre: "Akcja, Dramat", episodes: 87, episodeLength: "24 min", status: "Zakończone", startDate: "2013-04-07", endDate: "2023-11-05"},
-  { title: "Death Note", type: "anime", description: "Młody chłopak znajduje notes śmierci...", image: "DN.jpg", genre: "Thriller, Psychologiczne", episodes: 37, episodeLength: "23 min", status: "Zakończone", startDate: "2006-10-03", endDate: "2007-06-26"},
-  { title: "The Witcher 3", type: "game", description: "Przygody Geralta z Rivii...", image: "wiedzmin3.jpg", genre: "RPG, Fantasy", releaseYear: "2015", studio: "CD Projekt Red", platform: "PC, PS4, Xbox One"},
-  { title: "Red Dead Redemption 2", type: "game", description: "Przygoda w otwartym świecie Dzikiego Zachodu", image: "rdr2.jpg", genre: "Akcja, RPG", releaseYear: "2018", studio: "Rockstar Games", platform: "PC, PS4, Xbox One"},
-  { title: "Naruto", type: "anime", description: "Historia młodego ninja z wioski Liścia", image: "naruto.jpg", genre: "Akcja, Przygodowe", episodes: 220, episodeLength: "23 min", status: "Zakończone", startDate: "2002-10-03", endDate: "2007-02-08"},
-  { title: "Naruto Shippuden", type: "anime", description: "Kontynuacja przygód Naruto i jego przyjaciół", image: "narutoship.jpg", genre: "Akcja, Przygodowe", episodes: 500, episodeLength: "23 min", status: "Zakończone", startDate: "2007-02-15", endDate: "2017-03-23"},
-  { title: "Boruto: Naruto Next Generations", type: "anime", description: "Opowieść o synu Naruto, Boruto", image: "boruto.jpg", genre: "Akcja, Przygodowe", episodes: 293, episodeLength: "23 min", status: "Zakończone", startDate: "2017-04-05", endDate: "2023-03-26"},
-  { title: "The Last of Us Part I", type: "game", description: "Przygoda Joela i Ellie w postapokaliptycznym świecie", image: "TLOU1.jpg", genre: "Akcja, Horror, Przygodowe", releaseYear: "2022", studio: "Naughty Dog", platform: "PC, PS4, PS5"},
-  { title: "The Last of Us Part II", type: "game", description: "Kontynuacja historii Ellie i Joela", image: "TLOU2.jpg", genre: "Akcja, Horror, Przygodowe", releaseYear: "2020", studio: "Naughty Dog", platform: "PC, PS4, PS5"},
-  { title: "Cyberpunk 2077", type: "game", description: "Futurystyczne RPG w Night City", image: "CB.jpg", genre: "RPG, Sci-Fi", releaseYear: "2020", studio: "CD Projekt Red", platform: "PC, PS4, PS5, Xbox One, Xbox Series X"},
-  {title:"Grand Theft Auto III",type:"game",description:"Rewolucyjna gra akcji w otwartym świecie osadzona w Liberty City.",image:"GT3.jpg",genre:"Akcja, Open World",releaseYear:"2001",studio:"Rockstar Games",platform:"PS2, PC, Xbox"},
-  {title:"Grand Theft Auto IV",type:"game",description:"Historia Niko Bellica w mrocznym Liberty City.",image:"GT4.jpg",genre:"Akcja, Open World",releaseYear:"2008",studio:"Rockstar Games",platform:"PS3, Xbox 360, PC"},
-  {title:"Grand Theft Auto V",type:"game",description:"Trzech bohaterów, ogromny świat i tryb GTA Online.",image:"GT5.jpg",genre:"Akcja, Open World",releaseYear:"2013",studio:"Rockstar Games",platform:"PS3, PS4, PS5, Xbox, PC"},
-  {title:"Grand Theft Auto: San Andreas",type:"game",description:"Kultowa historia CJ-a w stanie San Andreas.",image:"GTSA.jpg",genre:"Akcja, Open World",releaseYear:"2004",studio:"Rockstar Games",platform:"PS2, PC, Xbox"},
-  {title:"Grand Theft Auto: Vice City",type:"game",description:"Neonowy klimat lat 80. i historia Tommy'ego Vercettiego.",image:"GTVC.jpg",genre:"Akcja, Open World",releaseYear:"2002",studio:"Rockstar Games",platform:"PS2, PC, Xbox"},
-  {title:"Elden Ring",type:"game",description:"Mroczne RPG akcji w ogromnym świecie fantasy.",image:"elden.jpg",genre:"RPG, Soulslike, Open World",releaseYear:"2022",studio:"FromSoftware",platform:"PS4, PS5, Xbox, PC"},
-  {title:"God of War",type:"game",description:"Nowy rozdział historii Kratosa w nordyckiej mitologii.",image:"GoW.jpg",genre:"Akcja, RPG",releaseYear:"2018",studio:"Santa Monica Studio",platform:"PS4, PS5, PC"},
-  {title:"God of War Ragnarök",type:"game",description:"Kontynuacja przygód Kratosa i Atreusa podczas Ragnaröku.",image:"GoWR.jpg",genre:"Akcja, RPG",releaseYear:"2022",studio:"Santa Monica Studio",platform:"PC, PS4, PS5"},
-  { title: "Jujutsu Kaisen", type: "anime", description: "Uczeń liceum wplątany w world klątw i egzorcystów.", image: "JJK.jpg", genre: "Shounen, Akcja, Nadprzyrodzone", episodes: 24, episodeLength: "23 min", status: "Zakończone", startDate: "2020-10-03", endDate: "2021-03-27" },
-  { title: "Demon Slayer", type: "anime", description: "Tanjiro walczy z demonami, by uratować swoją siostrę.", image: "DS.jpg", genre: "Shounen, Akcja, Fantasy", episodes: 63, episodeLength: "24 min", status: "Zakończone", startDate: "2019-04-06", endDate: "2019-09-28" },
-  { title: "One Piece", type: "anime", description: "Przygody Monkey D. Luffy’ego w poszukiwaniu legendarnego skarbu.", image: "OP.jpg", genre: "Shounen, Przygodowe, Akcja", episodes: 1060, episodeLength: "24 min", status: "Trwa", startDate: "1999-10-20", endDate: "" },
-  { title: "Tokyo Ghoul", type: "anime", description: "Mroczna historia studenta, który staje się pół-ghulem.", image: "TG.jpg", genre: "Horror, Akcja, Psychologiczne", episodes: 48, episodeLength: "24 min", status: "Zakończone", startDate: "2014-07-04", endDate: "2014-09-19" },
-  {title:"Clannad",type:"anime",description:"Historia Tomoyi i Nagisy, pełna emocji i wzruszeń.",image:"clannad.jpg",genre:"Drama, Romantyczne",episodes:23,episodeLength:"24 min",status:"Zakończone",startDate:"2007-10-04",endDate:"2008-03-27",studio:"Kyoto Animation"},
-  {title:"Clannad: After Story",type:"anime",description:"Kontynuacja przygód Tomoyi i Nagisy, historia pełna wzruszeń.",image:"clannadAS.jpg",genre:"Drama, Romantyczne",episodes:24,episodeLength:"24 min",status:"Zakończone",startDate:"2008-10-03",endDate:"2009-03-27",studio:"Kyoto Animation"}
-];
-
-// --- LOGIKA WYŚWIETLANIA ---
-const params = new URLSearchParams(window.location.search);
-const titleFromURL = params.get("title");
-const selectedItem = items.find(i => 
-  i.title.toLowerCase().trim() === (titleFromURL || "").toLowerCase().trim()
-);
-
-if(selectedItem){
-  document.getElementById("title").textContent = selectedItem.title;
-  document.getElementById("type").textContent = "Typ: " + selectedItem.type;
-  document.getElementById("description").textContent = selectedItem.description;
-  document.getElementById("cover").src = "images/" + selectedItem.image;
-  const extra = document.getElementById("extraDetails");
-  if(selectedItem.type==="anime"){
-    extra.innerHTML=`<p><strong>Gatunek:</strong> ${selectedItem.genre}</p><p><strong>Odcinki:</strong> ${selectedItem.episodes}</p><p><strong>Czas odcinka:</strong> ${selectedItem.episodeLength}</p><p><strong>Status:</strong> ${selectedItem.status}</p><p><strong>Start emisji:</strong> ${selectedItem.startDate}</p><p><strong>Koniec emisji:</strong> ${selectedItem.endDate}</p>`;
-  } else {
-    extra.innerHTML=`<p><strong>Gatunek:</strong> ${selectedItem.genre}</p><p><strong>Rok wydania:</strong> ${selectedItem.releaseYear}</p><p><strong>Studio:</strong> ${selectedItem.studio}</p><p><strong>Platforma:</strong> ${selectedItem.platform}</p>`;
-  }
-}
-
-// --- LOGIKA AUTH (MODAL) ---
 const modal = document.getElementById('auth-modal');
 const modalTitle = document.getElementById('modal-title');
 const actionBtn = document.getElementById('auth-action-btn');
@@ -336,6 +324,7 @@ const errorMsg = document.getElementById('auth-error');
 function setupAuthEvents() {
     const loginTrig = document.getElementById('btn-login-trigger');
     const signupTrig = document.getElementById('btn-signup-trigger');
+    
     if(loginTrig) loginTrig.onclick = () => { modal.style.display = "block"; modalTitle.innerText = "Zaloguj się"; };
     if(signupTrig) signupTrig.onclick = () => { modal.style.display = "block"; modalTitle.innerText = "Zarejestruj się"; };
 }
@@ -352,82 +341,118 @@ actionBtn.onclick = async () => {
             await signInWithEmailAndPassword(auth, email, pass);
         }
         modal.style.display = "none";
-    } catch (e) { errorMsg.innerText = "Błąd: " + e.message; }
+    } catch (error) {
+        errorMsg.innerText = "Błąd: " + error.message;
+    }
 };
 
 onAuthStateChanged(auth, (user) => {
-    currentUser = user;
     const container = document.getElementById('authContainer');
-    const warning = document.getElementById('login-warning');
     if (user) {
-        container.innerHTML = `<span style="color:white; font-size:12px; align-self:center">${user.email}</span><button id="btnLogout" class="btn-secondary">Wyloguj</button>`;
+        container.innerHTML = `
+            <span style="color:white; font-size:12px; align-self:center">${user.email}</span>
+            <button id="btnLogout" class="btn-secondary">Wyloguj</button>
+        `;
         document.getElementById('btnLogout').onclick = () => signOut(auth);
-        warning.style.display = "none";
     } else {
-        container.innerHTML = `<button id="btn-signup-trigger" class="btn-secondary">Zarejestruj się</button><button id="btn-login-trigger" class="btn-primary">Zaloguj się</button>`;
+        container.innerHTML = `
+            <button id="btn-signup-trigger" class="btn-secondary">Zarejestruj się</button>
+            <button id="btn-login-trigger" class="btn-primary">Zaloguj się</button>
+        `;
         setupAuthEvents();
-        warning.style.display = "block";
     }
 });
 
-// --- LOGIKA OCENIANIA (FIREBASE) ---
-const stars = document.querySelectorAll('.star');
-const averageRatingElem = document.getElementById('averageRating');
-const voteCountElem = document.getElementById('voteCount');
-const ratingDoc = doc(db, "ratings", titleFromURL || "default");
-let currentAvgGlobal = 0;
 
-async function saveVote(value){
-    if(!currentUser) {
-        alert("Musisz być zalogowany, aby oceniać!");
-        modal.style.display = "block";
-        return;
-    }
+let items = [
+  { title: "Attack on Titan", type: "anime", description: "Ludzkość walczy z Tytanami...", image: "aot.jpg" },
+  { title: "Death Note", type: "anime", description: "Młody chłopak znajduje notes śmierci...", image: "DN.jpg" },
+  { title: "The Witcher 3", type: "game", description: "Przygody Geralta z Rivii...", image: "wiedzmin3.jpg" },
+  { title: "Red Dead Redemption 2", type: "game", description: "Przygoda w otwartym świecie Dzikiego Zachodu", image: "rdr2.jpg" },
+  { title: "Naruto", type: "anime", description: "Historia młodego ninja z wioski Liścia", image: "naruto.jpg" },
+  { title: "Naruto Shippuden", type: "anime", description: "Kontynuacja przygód Naruto i jego przyjaciół", image: "narutoship.jpg" },
+  { title: "Boruto: Naruto Next Generations", type: "anime", description: "Opowieść o synu Naruto, Boruto", image: "boruto.jpg" },
+  { title: "The Last of Us Part I", type: "game", description: "Przygoda Joela i Ellie w postapokaliptycznym świecie", image: "TLOU1.jpg" },
+  { title: "The Last of Us Part II", type: "game", description: "Kontynuacja historii Ellie i Joela", image: "TLOU2.jpg" },
+  { title: "Cyberpunk 2077", type: "game", description: "Futurystyczne RPG w Night City", image: "CB.jpg" },
+  { title: "Grand Theft Auto III", type: "game", image: "GT3.jpg", description: "Rewolucyjna gra akcji w otwartym świecie osadzona w Liberty City." },
+  { title: "Grand Theft Auto IV", type: "game", image: "GT4.jpg", description: "Historia Niko Bellica w mrocznym Liberty City." },
+  { title: "Grand Theft Auto V", type: "game", image: "GT5.jpg", description: "Trzech bohaterów, ogromny świat i tryb GTA Online." },
+  { title: "Grand Theft Auto: San Andreas", type: "game", image: "GTSA.jpg", description: "Kultowa historia CJ-a w stanie San Andreas." },
+  { title: "Grand Theft Auto: Vice City", type: "game", image: "GTVC.jpg", description: "Neonowy klimat lat 80. i historia Tommy'ego Vercettiego." },
+  { title: "Elden Ring", type: "game", image: "elden.jpg", description: "Mroczne RPG akcji w ogromnym świecie fantasy." },
+  { title: "God of War", type: "game", image: "GoW.jpg", description: "Nowy rozdział historii Kratosa w nordyckiej mitologii." },
+  { title: "God of War Ragnarök", type: "game", image: "GoWR.jpg", description: "Kontynuacja przygód Kratosa i Atreusa podczas Ragnaröku." },
+  { title: "One Piece", type: "anime", image: "OP.jpg", description: "Przygody Monkey D. Luffy’ego w poszukiwaniu legendarnego skarbu." },
+  { title: "Demon Slayer", type: "anime", image: "DS.jpg", description: "Tanjiro walczy z demonami, by uratować swoją siostrę." },
+  { title: "Tokyo Ghoul", type: "anime", image: "TG.jpg", description: "Mroczna historia studenta, który staje się pół-ghulem." },
+  { title: "Jujutsu Kaisen", type: "anime", image: "JJK.jpg", description: "Uczeń liceum wplątany w świat klątw i egzorcystów." },
+  { title: "Clannad", type: "anime", image: "clannad.jpg", description: "Historia Tomoyi i Nagisy, pełna emocji i wzruszeń." },
+  { title: "Clannad: After Story", type: "anime", image: "clannadAS.jpg", description: "Kontynuacja przygód Tomoyi i Nagisy, historia pełna wzruszeń." }
+];
+const customTitles = JSON.parse(localStorage.getItem("customTitles")) || [];
+items = [...items, ...customTitles];
 
-    const docSnap = await getDoc(ratingDoc);
-    if(!docSnap.exists()){ 
-        await setDoc(ratingDoc, {votes:0, total:0, userVoted:[]}); 
-    }
-    
-    const data = (await getDoc(ratingDoc)).data();
-    if(!data.userVoted.includes(currentUser.uid)){
-        await updateDoc(ratingDoc, {
-            votes: increment(1), 
-            total: increment(value), 
-            userVoted: arrayUnion(currentUser.uid)
-        });
-        alert("Dziękujemy za głos!");
-    } else {
-        alert("Już zagłosowałeś na ten tytuł!");
-    }
-}
+let params = new URLSearchParams(window.location.search);
+let searchValue = params.get("search")?.toLowerCase() || "";
+let currentFilter = "all";
 
-function updateStars(value){
-    stars.forEach(star=>{
-        if(parseInt(star.dataset.value) <= value){ 
-            star.textContent = "★"; star.classList.add("filled"); 
-        } else { 
-            star.textContent = "☆"; star.classList.remove("filled"); 
-        }
+document.getElementById("searchInput").value = decodeURIComponent(params.get("search") || "");
+
+function renderResults() {
+  let container = document.getElementById("resultsContainer");
+  container.innerHTML = "";
+
+  let filtered = items.filter(item => {
+    let matchesSearch = item.title.toLowerCase().startsWith(searchValue);
+    let matchesType = currentFilter === "all" || item.type === currentFilter;
+    return matchesSearch && matchesType;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = "<h2 style='text-align:center;'>Brak wyników</h2>";
+    return;
+  }
+
+  filtered.forEach(item => {
+    let card = document.createElement("div");
+    card.classList.add("card");
+    const imgSrc = (item.image.startsWith("data:") || item.image.startsWith("http"))
+  ? item.image
+  : "images/" + item.image;
+
+card.innerHTML = `
+  <img src="${imgSrc}">
+  <div class="info">
+    <h2>${item.title}</h2>
+    <p>${item.description}</p>
+  </div>
+`;
+    card.addEventListener("click", () => {
+      window.location.href = "details.html?title=" + item.title;
     });
+    container.appendChild(card);
+  });
 }
 
-onSnapshot(ratingDoc, (docSnap)=>{
-    if(docSnap.exists()){
-        const data = docSnap.data();
-        currentAvgGlobal = data.votes ? (data.total / data.votes) : 0;
-        averageRatingElem.textContent = currentAvgGlobal.toFixed(1) + " / 10";
-        voteCountElem.textContent = data.votes + " głosów";
-        updateStars(Math.round(currentAvgGlobal));
-    }
+
+window.filterType = function(type) {
+  currentFilter = type;
+  renderResults();
+};
+
+window.newSearch = function() {
+  const value = document.getElementById("searchInput").value.trim();
+  if(value !== ""){
+    window.location.href = "results.html?search=" + encodeURIComponent(value);
+  }
+};
+
+document.getElementById("backButton").addEventListener("click", () => {
+  window.location.href = "index.html";
 });
 
-stars.forEach(star=>{
-    star.addEventListener('click', () => saveVote(parseInt(star.dataset.value)));
-    star.addEventListener('mouseover', () => updateStars(parseInt(star.dataset.value)));
-    star.addEventListener('mouseout', () => updateStars(Math.round(currentAvgGlobal)));
-});
-
+renderResults();
 setupAuthEvents();
 const themeBtn = document.getElementById("themeToggle");
 
@@ -451,104 +476,7 @@ if (themeBtn) {
     }
   });
 }
-const commentsContainer = document.getElementById("commentsContainer");
-const commentInput = document.getElementById("commentInput");
-const sendComment = document.getElementById("sendComment");
-
-const commentsRef = collection(db, "comments", titleFromURL, "messages");
-
-async function addComment() {
-
-  if (!currentUser) {
-    alert("Musisz być zalogowany!");
-    return;
-  }
-
-  const text = commentInput.value.trim();
-
-  if (text === "") return;
-
-  await addDoc(commentsRef, {
-    user: currentUser.email,
-    text: text,
-    created: Date.now()
-  });
-
-  commentInput.value = "";
-}
-
-sendComment.addEventListener("click", addComment);
-
-const qComments = query(commentsRef, orderBy("created", "desc"));
-
-onSnapshot(qComments, (snapshot) => {
-
-  commentsContainer.innerHTML = "";
-
-  snapshot.forEach(doc => {
-
-    const data = doc.data();
-
-    const div = document.createElement("div");
-
-    div.className = "comment";
-
-    div.innerHTML = `
-      <div class="comment-user">${data.user}</div>
-      <div class="comment-text">${data.text}</div>
-    `;
-
-    commentsContainer.appendChild(div);
-
-  });
-
-});
-const favBtn = document.getElementById("favBtn");
-
-function getFavorites() {
-  return JSON.parse(localStorage.getItem("favorites")) || [];
-}
-
-function saveFavorites(favs) {
-  localStorage.setItem("favorites", JSON.stringify(favs));
-}
-
-function updateFavButton() {
-
-  const favs = getFavorites();
-
-  const exists = favs.find(f => f.title === selectedItem.title);
-
-  if (exists) {
-    favBtn.textContent = "❤️ W ulubionych";
-  } else {
-    favBtn.textContent = "🤍 Dodaj do ulubionych";
-  }
-}
-
-favBtn.addEventListener("click", () => {
-
-  let favs = getFavorites();
-
-  const exists = favs.find(f => f.title === selectedItem.title);
-
-  if (exists) {
-
-    favs = favs.filter(f => f.title !== selectedItem.title);
-
-  } else {
-
-    favs.push(selectedItem);
-
-  }
-
-  saveFavorites(favs);
-
-  updateFavButton();
-
-});
-
-updateFavButton();
 </script>
+
 </body>
 </html>
