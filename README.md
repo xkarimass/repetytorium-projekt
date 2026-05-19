@@ -15,6 +15,7 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 - Firebase
 
 ## ⚙️ Funkcjonalności
+- Dodawanie komentarzy
 - Wyświetlanie listy tytułów
 - System ocen w skali 1–10
 - Automatyczne liczenie średniej ocen
@@ -38,4 +39,3 @@ z wykorzystaniem HTML, CSS oraz JavaScript.
 ## 🚀 Możliwości rozwoju
 - Sortowanie po ocenie
 - inne kategorie np zespoły
-- dodawanie komentarzy 
