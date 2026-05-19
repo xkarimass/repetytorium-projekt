@@ -1,4 +1,5 @@
 # Anime & Games Rating
+https://xkarimass.github.io/repetytorium-projekt/
 
 Projekt aplikacji webowej inspirowanej serwisem IMDB.  
 Umożliwia przeglądanie oraz ocenianie anime i gier.
