@@ -1,4 +1,8 @@
 # Anime & Games Rating
+kto roby projekt
+1) Kacper	Ćwiękała
+2) Ivan	Ratushniuk
+3) Danil	Blotskyi
 https://xkarimass.github.io/repetytorium-projekt/
 
 Projekt aplikacji webowej inspirowanej serwisem IMDB.  
